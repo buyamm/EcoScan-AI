@@ -2,7 +2,9 @@ class AppConstants {
   AppConstants._();
 
   // Groq API (free tier, OpenAI-compatible)
-  static const String groqApiKey = 'YOUR_GROQ_API_KEY_HERE';
+  // Value is injected at build time via --dart-define-from-file=.env
+  static const String groqApiKey =
+      String.fromEnvironment('GROQ_API_KEY', defaultValue: '');
   static const String groqBaseUrl = 'https://api.groq.com/openai/v1';
   static const String groqModel = 'llama-3.3-70b-versatile';
   static const int groqTimeoutSeconds = 15;
