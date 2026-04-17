@@ -86,8 +86,8 @@ class EcoScanApp extends StatelessWidget {
           return MaterialApp.router(
             title: 'EcoScan AI',
             debugShowCheckedModeBanner: false,
-            theme: AppTheme.light,
-            darkTheme: AppTheme.dark,
+            theme: AppTheme.lightWithScale(settingsState.fontSize),
+            darkTheme: AppTheme.darkWithScale(settingsState.fontSize),
             themeMode: settingsState.themeMode,
             locale: settingsState.locale,
             supportedLocales: AppLocalizations.supportedLocales,

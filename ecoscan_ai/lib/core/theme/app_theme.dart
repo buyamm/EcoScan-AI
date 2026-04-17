@@ -22,9 +22,43 @@ class AppColors {
 class AppTheme {
   AppTheme._();
 
-  static final _textTheme = GoogleFonts.interTextTheme();
+  static TextTheme _scaledTextTheme(double scale, {bool dark = false}) {
+    final base = dark
+        ? GoogleFonts.interTextTheme().apply(
+            bodyColor: Colors.white,
+            displayColor: Colors.white,
+          )
+        : GoogleFonts.interTextTheme();
+    if (scale == 1.0) return base;
+    return base.copyWith(
+      displayLarge: base.displayLarge?.copyWith(fontSize: (base.displayLarge!.fontSize ?? 57) * scale),
+      displayMedium: base.displayMedium?.copyWith(fontSize: (base.displayMedium!.fontSize ?? 45) * scale),
+      displaySmall: base.displaySmall?.copyWith(fontSize: (base.displaySmall!.fontSize ?? 36) * scale),
+      headlineLarge: base.headlineLarge?.copyWith(fontSize: (base.headlineLarge!.fontSize ?? 32) * scale),
+      headlineMedium: base.headlineMedium?.copyWith(fontSize: (base.headlineMedium!.fontSize ?? 28) * scale),
+      headlineSmall: base.headlineSmall?.copyWith(fontSize: (base.headlineSmall!.fontSize ?? 24) * scale),
+      titleLarge: base.titleLarge?.copyWith(fontSize: (base.titleLarge!.fontSize ?? 22) * scale),
+      titleMedium: base.titleMedium?.copyWith(fontSize: (base.titleMedium!.fontSize ?? 16) * scale),
+      titleSmall: base.titleSmall?.copyWith(fontSize: (base.titleSmall!.fontSize ?? 14) * scale),
+      bodyLarge: base.bodyLarge?.copyWith(fontSize: (base.bodyLarge!.fontSize ?? 16) * scale),
+      bodyMedium: base.bodyMedium?.copyWith(fontSize: (base.bodyMedium!.fontSize ?? 14) * scale),
+      bodySmall: base.bodySmall?.copyWith(fontSize: (base.bodySmall!.fontSize ?? 12) * scale),
+      labelLarge: base.labelLarge?.copyWith(fontSize: (base.labelLarge!.fontSize ?? 14) * scale),
+      labelMedium: base.labelMedium?.copyWith(fontSize: (base.labelMedium!.fontSize ?? 12) * scale),
+      labelSmall: base.labelSmall?.copyWith(fontSize: (base.labelSmall!.fontSize ?? 11) * scale),
+    );
+  }
 
-  static ThemeData get light => ThemeData(
+  /// Returns a light theme with the given font scale factor (default 1.0).
+  static ThemeData lightWithScale(double scale) => _buildLight(scale);
+
+  /// Returns a dark theme with the given font scale factor (default 1.0).
+  static ThemeData darkWithScale(double scale) => _buildDark(scale);
+
+  static ThemeData get light => _buildLight(1.0);
+  static ThemeData get dark => _buildDark(1.0);
+
+  static ThemeData _buildLight(double scale) => ThemeData(
         useMaterial3: true,
         colorScheme: ColorScheme.fromSeed(
           seedColor: AppColors.primary,
@@ -35,7 +69,7 @@ class AppTheme {
           brightness: Brightness.light,
         ),
         scaffoldBackgroundColor: AppColors.backgroundLight,
-        textTheme: _textTheme,
+        textTheme: _scaledTextTheme(scale),
         appBarTheme: AppBarTheme(
           backgroundColor: AppColors.primary,
           foregroundColor: AppColors.onPrimary,
@@ -69,7 +103,7 @@ class AppTheme {
         ),
       );
 
-  static ThemeData get dark => ThemeData(
+  static ThemeData _buildDark(double scale) => ThemeData(
         useMaterial3: true,
         colorScheme: ColorScheme.fromSeed(
           seedColor: AppColors.primary,
@@ -80,10 +114,7 @@ class AppTheme {
           brightness: Brightness.dark,
         ),
         scaffoldBackgroundColor: AppColors.backgroundDark,
-        textTheme: _textTheme.apply(
-          bodyColor: Colors.white,
-          displayColor: Colors.white,
-        ),
+        textTheme: _scaledTextTheme(scale, dark: true),
         appBarTheme: AppBarTheme(
           backgroundColor: AppColors.backgroundDark,
           foregroundColor: AppColors.secondary,
