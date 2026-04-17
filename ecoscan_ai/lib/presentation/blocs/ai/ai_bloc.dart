@@ -1,7 +1,12 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:uuid/uuid.dart';
+import '../../../core/utils/achievement_service.dart';
+import '../../../core/utils/eco_score_calculator.dart';
 import '../../../data/models/ai_analysis_model.dart';
 import '../../../data/models/product_model.dart';
+import '../../../data/models/scan_record.dart';
 import '../../../data/models/user_profile.dart';
+import '../../../data/repositories/scan_history_repository.dart';
 import '../../../data/repositories/user_profile_repository.dart';
 import '../../../data/services/groq_service.dart';
 
@@ -11,6 +16,7 @@ part 'ai_state.dart';
 class AIBloc extends Bloc<AIEvent, AIState> {
   final GroqService _groqService;
   final UserProfileRepository _profileRepo;
+  final ScanHistoryRepository _historyRepo;
 
   /// Cached last event for retry support.
   AIEvent? _lastEvent;
@@ -18,8 +24,10 @@ class AIBloc extends Bloc<AIEvent, AIState> {
   AIBloc({
     required GroqService groqService,
     required UserProfileRepository profileRepo,
+    required ScanHistoryRepository historyRepo,
   })  : _groqService = groqService,
         _profileRepo = profileRepo,
+        _historyRepo = historyRepo,
         super(AIInitial()) {
     on<AnalyzeProduct>(_onAnalyzeProduct);
     on<AnalyzeOCRText>(_onAnalyzeOCRText);
@@ -36,6 +44,7 @@ class AIBloc extends Bloc<AIEvent, AIState> {
       product: event.product,
       userProfile: profile,
       emit: emit,
+      scanMethod: event.scanMethod,
     );
   }
 
@@ -57,6 +66,7 @@ class AIBloc extends Bloc<AIEvent, AIState> {
       product: syntheticProduct,
       userProfile: profile,
       emit: emit,
+      scanMethod: 'ocr',
     );
   }
 
@@ -76,13 +86,41 @@ class AIBloc extends Bloc<AIEvent, AIState> {
     required ProductModel product,
     required UserProfile userProfile,
     required Emitter<AIState> emit,
+    String scanMethod = 'barcode',
   }) async {
     try {
-      final analysis = await _groqService.analyzeProduct(
+      final rawAnalysis = await _groqService.analyzeProduct(
         product,
         userProfile: userProfile,
       );
-      emit(AISuccess(analysis, product: product));
+
+      // Recalculate overall score using weighted formula (health 40%, env 40%, ethics 20%)
+      final analysis = EcoScoreCalculator.recalculate(rawAnalysis);
+
+      // Auto-save scan record
+      final previousTotal = _historyRepo.getAll().length;
+      final record = ScanRecord(
+        id: const Uuid().v4(),
+        scannedAt: DateTime.now(),
+        product: product,
+        analysis: analysis,
+        scanMethod: scanMethod,
+      );
+      await _historyRepo.save(record);
+
+      // Check for newly unlocked achievements
+      final allRecords = _historyRepo.getAll();
+      final newAchievements = AchievementService.checkNewAchievements(
+        allRecords: allRecords,
+        previousTotal: previousTotal,
+      );
+
+      emit(AISuccess(
+        analysis,
+        product: product,
+        scanRecordId: record.id,
+        newAchievements: newAchievements,
+      ));
     } on RateLimitException catch (e) {
       emit(AIError(
         message:

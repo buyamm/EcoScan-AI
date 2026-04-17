@@ -74,6 +74,7 @@ class EcoScanApp extends StatelessWidget {
           create: (_) => AIBloc(
             groqService: GroqService(),
             profileRepo: userProfileRepo,
+            historyRepo: scanHistoryRepo,
           ),
         ),
         BlocProvider(

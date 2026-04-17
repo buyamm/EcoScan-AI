@@ -8,10 +8,22 @@ class AILoading extends AIState {}
 
 class AISuccess extends AIState {
   final AIAnalysisModel analysis;
+
   /// The product associated with this analysis (null for OCR-only flows).
   final ProductModel? product;
 
-  AISuccess(this.analysis, {this.product});
+  /// The saved scan record id (set after auto-save).
+  final String? scanRecordId;
+
+  /// Milestones newly unlocked by this scan.
+  final List<AchievementMilestone> newAchievements;
+
+  AISuccess(
+    this.analysis, {
+    this.product,
+    this.scanRecordId,
+    this.newAchievements = const [],
+  });
 }
 
 class AIError extends AIState {
