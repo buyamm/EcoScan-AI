@@ -27,7 +27,7 @@ class RecommendationScreen extends StatelessWidget {
                   ? const EmptyStateWidget(
                       icon: Icons.tips_and_updates_outlined,
                       title: 'Chưa có gợi ý',
-                      message:
+                      description:
                           'Quét một số sản phẩm để nhận gợi ý cải thiện từ AI',
                     )
                   : ListView(

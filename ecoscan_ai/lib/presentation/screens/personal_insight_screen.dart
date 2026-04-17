@@ -26,7 +26,7 @@ class PersonalInsightScreen extends StatelessWidget {
                   ? const EmptyStateWidget(
                       icon: Icons.insights_outlined,
                       title: 'Chưa có đủ dữ liệu',
-                      message:
+                      description:
                           'Quét một số sản phẩm để xem insight cá nhân của bạn',
                     )
                   : ListView(

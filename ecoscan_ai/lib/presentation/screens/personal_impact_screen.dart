@@ -5,6 +5,7 @@ import '../../core/theme/app_theme.dart';
 import '../../data/models/ai_analysis_model.dart';
 import '../blocs/history/history_cubit.dart';
 import '../widgets/eco_score_chip.dart';
+import 'impact_empty_screen.dart';
 
 class PersonalImpactScreen extends StatelessWidget {
   const PersonalImpactScreen({super.key});

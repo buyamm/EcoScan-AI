@@ -63,6 +63,7 @@ class AIPersonalizedScreen extends StatelessWidget {
                     children: [
                       ScoreGauge(
                         score: _personalizedScore(analysis, allergenMatches, lifestyleIssues),
+                        label: 'Phù hợp',
                         size: 80,
                       ),
                       const SizedBox(width: 20),

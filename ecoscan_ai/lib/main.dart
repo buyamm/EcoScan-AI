@@ -1,13 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'l10n/app_localizations.dart';
 import 'core/theme/app_theme.dart';
 import 'core/utils/hive_init.dart';
+import 'core/router/app_router.dart';
 import 'data/repositories/settings_repository.dart';
 import 'data/repositories/user_profile_repository.dart';
 import 'data/repositories/scan_history_repository.dart';
 import 'data/repositories/product_cache_repository.dart';
+import 'data/services/groq_service.dart';
+import 'data/services/open_food_facts_service.dart';
+import 'data/services/ocr_service.dart';
+import 'presentation/blocs/ai/ai_bloc.dart';
+import 'presentation/blocs/history/history_cubit.dart';
+import 'presentation/blocs/ocr/ocr_bloc.dart';
+import 'presentation/blocs/profile/profile_cubit.dart';
+import 'presentation/blocs/scan/scan_bloc.dart';
+import 'presentation/blocs/settings/settings_cubit.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -42,24 +53,52 @@ class EcoScanApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'EcoScan AI',
-      debugShowCheckedModeBanner: false,
-      theme: AppTheme.light,
-      darkTheme: AppTheme.dark,
-      themeMode: ThemeMode.system,
-      locale: const Locale('vi'),
-      supportedLocales: AppLocalizations.supportedLocales,
-      localizationsDelegates: const [
-        AppLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      home: const Scaffold(
-        body: Center(
-          child: Text('EcoScan AI'),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (_) => SettingsCubit(repo: settingsRepo),
         ),
+        BlocProvider(
+          create: (_) => ProfileCubit(repo: userProfileRepo),
+        ),
+        BlocProvider(
+          create: (_) => HistoryCubit(repo: scanHistoryRepo)..loadHistory(),
+        ),
+        BlocProvider(
+          create: (_) => ScanBloc(
+            offService: OpenFoodFactsService(),
+            cacheRepo: productCacheRepo,
+          ),
+        ),
+        BlocProvider(
+          create: (_) => AIBloc(
+            groqService: GroqService(),
+            profileRepo: userProfileRepo,
+          ),
+        ),
+        BlocProvider(
+          create: (_) => OCRBloc(ocrService: OcrService()),
+        ),
+      ],
+      child: BlocBuilder<SettingsCubit, SettingsState>(
+        builder: (context, settingsState) {
+          return MaterialApp.router(
+            title: 'EcoScan AI',
+            debugShowCheckedModeBanner: false,
+            theme: AppTheme.light,
+            darkTheme: AppTheme.dark,
+            themeMode: settingsState.themeMode,
+            locale: settingsState.locale,
+            supportedLocales: AppLocalizations.supportedLocales,
+            localizationsDelegates: const [
+              AppLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            routerConfig: AppRouter.createRouter(),
+          );
+        },
       ),
     );
   }

@@ -118,6 +118,13 @@ class ProductModel extends HiveObject {
         'category': category,
       };
 
+  /// Creates a minimal placeholder used for deep-link navigation before data loads.
+  factory ProductModel.empty({String barcode = ''}) => ProductModel(
+        barcode: barcode,
+        name: '',
+        brand: '',
+      );
+
   factory ProductModel.fromStoredJson(Map<String, dynamic> json) {
     return ProductModel(
       barcode: json['barcode'] ?? '',

@@ -16,20 +16,25 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int _currentIndex = 0;
+  static const _tabs = ['/home', '/scan', '/history', '/profile'];
 
-  static const _tabs = ['/home/dashboard', '/scan', '/history', '/profile'];
+  int _indexForLocation(String location) {
+    for (int i = 0; i < _tabs.length; i++) {
+      if (location.startsWith(_tabs[i])) return i;
+    }
+    return 0;
+  }
 
   @override
   Widget build(BuildContext context) {
+    final location = GoRouterState.of(context).uri.toString();
+    final currentIndex = _indexForLocation(location);
+
     return Scaffold(
       body: widget.child,
       bottomNavigationBar: NavigationBar(
-        selectedIndex: _currentIndex,
-        onDestinationSelected: (i) {
-          setState(() => _currentIndex = i);
-          context.go(_tabs[i]);
-        },
+        selectedIndex: currentIndex,
+        onDestinationSelected: (i) => context.go(_tabs[i]),
         destinations: const [
           NavigationDestination(
             icon: Icon(Icons.home_outlined),

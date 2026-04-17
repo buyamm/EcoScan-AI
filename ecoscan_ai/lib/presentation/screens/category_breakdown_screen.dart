@@ -57,7 +57,7 @@ class CategoryBreakdownScreen extends StatelessWidget {
           map[cat]!.red++;
           break;
       }
-      map[cat]!.totalScore += r.analysis.overallScore;
+      map[cat]!.totalScore += r.analysis.overallScore as int;
     }
     // Sort by total descending
     final sorted = Map.fromEntries(map.entries.toList()

@@ -6,6 +6,7 @@ import '../../data/models/ai_analysis_model.dart';
 import '../blocs/history/history_cubit.dart';
 import '../widgets/product_list_tile.dart';
 import '../widgets/empty_state_widget.dart';
+import 'history_empty_screen.dart';
 
 class ScanHistoryScreen extends StatelessWidget {
   const ScanHistoryScreen({super.key});

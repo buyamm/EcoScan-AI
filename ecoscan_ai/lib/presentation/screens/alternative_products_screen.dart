@@ -121,7 +121,7 @@ class _AlternativeProductsScreenState
       return const EmptyStateWidget(
         icon: Icons.swap_horiz_outlined,
         title: 'Chưa tìm thấy sản phẩm thay thế',
-        subtitle: 'Thử lại sau hoặc tìm kiếm thủ công trong cửa hàng.',
+        description: 'Thử lại sau hoặc tìm kiếm thủ công trong cửa hàng.',
       );
     }
 

@@ -36,7 +36,7 @@ class HistoryEmptyScreen extends StatelessWidget {
             ),
             const SizedBox(height: 12),
             OutlinedButton.icon(
-              onPressed: () => context.go('/home/dashboard'),
+              onPressed: () => context.go('/home'),
               icon: const Icon(Icons.home_outlined),
               label: const Text('Về trang chủ'),
             ),

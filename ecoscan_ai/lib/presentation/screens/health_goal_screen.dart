@@ -63,7 +63,7 @@ class HealthGoalScreen extends StatelessWidget {
                   padding: const EdgeInsets.all(20),
                   child: Row(
                     children: [
-                      ScoreGauge(score: avgHealth, size: 80),
+                      ScoreGauge(score: avgHealth, size: 80, label: 'Sức khỏe'),
                       const SizedBox(width: 20),
                       Expanded(
                         child: Column(
