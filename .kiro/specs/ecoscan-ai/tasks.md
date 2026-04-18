@@ -324,22 +324,22 @@
   - Hiển thị badge "Phù hợp với bạn ✓" trên sản phẩm thay thế không có xung đột
   - _Requirements: 15.5_
 
-- [ ] 18. Hoàn thiện tính năng OCR chụp nhãn thành phần
-- [ ] 18.1 Cập nhật OCRScanScreen với chế độ chụp ảnh tĩnh
+- [x] 18. Hoàn thiện tính năng OCR chụp nhãn thành phần
+- [x] 18.1 Cập nhật OCRScanScreen với chế độ chụp ảnh tĩnh
   - Cập nhật `OCRScanScreen` thêm nút chụp ảnh (capture button) thay vì chỉ dùng camera stream
   - Khi nhấn chụp: dừng camera, lấy frame hiện tại, gửi vào `OCRBloc` qua `ProcessStaticImage`
   - Giữ nút "Chọn từ thư viện" cho ảnh có sẵn
   - Hiển thị hướng dẫn rõ ràng: "Căn chỉnh vào phần THÀNH PHẦN trên nhãn"
   - _Requirements: 16.1, 16.2_
 
-- [ ] 18.2 Cập nhật OCRResultScreen và OCREditScreen
+- [x] 18.2 Cập nhật OCRResultScreen và OCREditScreen
   - Cập nhật `OCRResultScreen` hiển thị text đã nhận dạng trong scrollable container, nút "Chỉnh sửa" → `OCREditScreen`, nút "Phân tích ngay"
   - Khi nhấn "Phân tích ngay": dispatch `AnalyzeOCRText` vào `AIBloc`, navigate đến `/ai/loading`
   - Cập nhật `OCREditScreen` với TextField đầy đủ, nút "Xác nhận và phân tích"
   - Xử lý trường hợp text trống hoặc quá ngắn: hiển thị SnackBar hướng dẫn
   - _Requirements: 16.3, 16.4, 16.5_
 
-- [ ] 18.3 Cải thiện OCRBloc xử lý camera stream
+- [x] 18.3 Cải thiện OCRBloc xử lý camera stream
   - Cập nhật `OCRBloc` để xử lý `MobileScannerImage` từ camera stream (không chỉ static image)
   - Thêm debounce 1 giây để tránh xử lý quá nhiều frame
   - Emit `OCRTextDetected` khi nhận dạng được text có độ dài > 20 ký tự

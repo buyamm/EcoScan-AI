@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import '../blocs/ai/ai_bloc.dart';
-import '../../data/models/product_model.dart';
+import '../../core/theme/app_theme.dart';
 
 class OCREditScreen extends StatefulWidget {
   final String initialText;
@@ -32,17 +32,23 @@ class _OCREditScreenState extends State<OCREditScreen> {
     final text = _controller.text.trim();
     if (text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Vui lòng nhập nội dung thành phần')),
+        const SnackBar(
+          content: Text('Vui lòng nhập nội dung thành phần trước khi phân tích.'),
+        ),
       );
       return;
     }
-    final product = ProductModel(
-      barcode: '',
-      name: 'Sản phẩm OCR',
-      brand: '',
-      ingredientsText: text,
-    );
-    context.read<AIBloc>().add(AnalyzeProduct(product));
+    if (text.length < 10) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            'Văn bản quá ngắn. Hãy nhập đầy đủ danh sách thành phần để AI phân tích chính xác.',
+          ),
+        ),
+      );
+      return;
+    }
+    context.read<AIBloc>().add(AnalyzeOCRText(text));
     context.go('/ai/loading');
   }
 
@@ -68,8 +74,7 @@ class _OCREditScreenState extends State<OCREditScreen> {
           children: [
             const Text(
               'Chỉnh sửa danh sách thành phần',
-              style: TextStyle(
-                  fontWeight: FontWeight.w700, fontSize: 16),
+              style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
             ),
             const SizedBox(height: 8),
             Text(
@@ -98,7 +103,7 @@ class _OCREditScreenState extends State<OCREditScreen> {
               child: ElevatedButton.icon(
                 onPressed: _analyze,
                 icon: const Icon(Icons.psychology),
-                label: const Text('Gửi AI phân tích'),
+                label: const Text('Xác nhận và phân tích'),
               ),
             ),
           ],
