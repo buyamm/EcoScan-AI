@@ -21,9 +21,7 @@ class UserProfileAdapter extends TypeAdapter<UserProfile> {
       allergies: (fields[1] as List).cast<String>(),
       lifestyle: (fields[2] as List).cast<LifestyleOption>(),
       customAllergies: (fields[3] as List).cast<String>(),
-      dietaryPreferences: fields[4] == null
-          ? []
-          : (fields[4] as List).cast<DietaryPreference>(),
+      dietaryPreferences: (fields[4] as List).cast<DietaryPreference>(),
     );
   }
 

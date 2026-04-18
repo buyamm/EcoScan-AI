@@ -30,13 +30,14 @@ class ProductModelAdapter extends TypeAdapter<ProductModel> {
       ecoScore: fields[10] as String?,
       nutriScore: fields[11] as String?,
       category: fields[12] as String?,
+      categories: (fields[13] as List).cast<String>(),
     );
   }
 
   @override
   void write(BinaryWriter writer, ProductModel obj) {
     writer
-      ..writeByte(13)
+      ..writeByte(14)
       ..writeByte(0)
       ..write(obj.barcode)
       ..writeByte(1)
@@ -62,7 +63,9 @@ class ProductModelAdapter extends TypeAdapter<ProductModel> {
       ..writeByte(11)
       ..write(obj.nutriScore)
       ..writeByte(12)
-      ..write(obj.category);
+      ..write(obj.category)
+      ..writeByte(13)
+      ..write(obj.categories);
   }
 
   @override

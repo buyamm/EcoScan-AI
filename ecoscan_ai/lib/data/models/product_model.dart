@@ -44,6 +44,9 @@ class ProductModel extends HiveObject {
   @HiveField(12)
   final String? category;
 
+  @HiveField(13)
+  final List<String> categories;
+
   ProductModel({
     required this.barcode,
     required this.name,
@@ -58,6 +61,7 @@ class ProductModel extends HiveObject {
     this.ecoScore,
     this.nutriScore,
     this.category,
+    this.categories = const [],
   });
 
   factory ProductModel.fromJson(Map<String, dynamic> json, String barcode) {
@@ -99,6 +103,7 @@ class ProductModel extends HiveObject {
       category: parseStringList(product['categories_tags']).isNotEmpty
           ? parseStringList(product['categories_tags']).first
           : null,
+      categories: parseStringList(product['categories_tags']),
     );
   }
 
@@ -116,6 +121,7 @@ class ProductModel extends HiveObject {
         'ecoScore': ecoScore,
         'nutriScore': nutriScore,
         'category': category,
+        'categories': categories,
       };
 
   /// Creates a minimal placeholder used for deep-link navigation before data loads.
@@ -142,6 +148,7 @@ class ProductModel extends HiveObject {
       ecoScore: json['ecoScore'],
       nutriScore: json['nutriScore'],
       category: json['category'],
+      categories: List<String>.from(json['categories'] ?? []),
     );
   }
 }

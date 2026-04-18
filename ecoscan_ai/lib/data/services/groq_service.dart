@@ -102,7 +102,87 @@ class GroqService {
     }
   }
 
-  // ─── Private helpers ────────────────────────────────────────────────────────
+  /// Ask Groq AI to suggest generic alternative product keywords
+  /// based on the scanned product and user profile.
+  ///
+  /// Returns a list of English search terms suitable for Open Food Facts,
+  /// e.g. ["oat milk", "soy milk", "almond milk"].
+  Future<List<String>> suggestAlternativeKeywords(
+    ProductModel product,
+    UserProfile? userProfile,
+  ) async {
+    final sb = StringBuffer();
+    sb.writeln('Sản phẩm cần thay thế:');
+    sb.writeln('- Tên: ${product.name}');
+    sb.writeln('- Thương hiệu: ${product.brand}');
+    sb.writeln('- Thành phần: ${product.ingredientsText.isNotEmpty ? product.ingredientsText : product.ingredients.join(', ')}');
+    sb.writeln('- Danh mục: ${product.categories.join(', ')}');
+
+    if (userProfile != null && userProfile.allAllergies.isNotEmpty) {
+      sb.writeln('Người dùng dị ứng với: ${userProfile.allAllergies.join(', ')}');
+    }
+    if (userProfile != null && userProfile.dietaryPreferences.isNotEmpty) {
+      sb.writeln('Chế độ ăn: ${userProfile.dietaryPreferences.map((d) => d.name).join(', ')}');
+    }
+    if (userProfile != null && userProfile.lifestyle.isNotEmpty) {
+      sb.writeln('Lối sống: ${userProfile.lifestyle.map((l) => l.name).join(', ')}');
+    }
+
+    sb.writeln('');
+    sb.writeln('Hãy gợi ý 3-5 loại sản phẩm thay thế phù hợp với người dùng.');
+    sb.writeln('Yêu cầu: từ khóa bằng tiếng Anh, ngắn gọn, phù hợp để tìm kiếm trên Open Food Facts.');
+    sb.writeln('Trả về JSON: {"keywords": ["keyword1", "keyword2", ...]}');
+
+    final body = jsonEncode({
+      'model': AppConstants.groqModel,
+      'messages': [
+        {
+          'role': 'system',
+          'content': 'Bạn là chuyên gia dinh dưỡng. Trả về JSON hợp lệ, không markdown.',
+        },
+        {'role': 'user', 'content': sb.toString()},
+      ],
+      'response_format': {'type': 'json_object'},
+      'temperature': 0.4,
+    });
+
+    try {
+      final response = await _client
+          .post(
+            Uri.parse('${AppConstants.groqBaseUrl}/chat/completions'),
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer ${AppConstants.groqApiKey}',
+            },
+            body: body,
+          )
+          .timeout(Duration(seconds: AppConstants.groqTimeoutSeconds));
+
+      if (response.statusCode != 200) return [];
+
+      final decoded =
+          jsonDecode(utf8.decode(response.bodyBytes)) as Map<String, dynamic>;
+      final content = decoded['choices']?[0]?['message']?['content'];
+      if (content == null) return [];
+
+      String cleaned = content.toString().trim();
+      if (cleaned.startsWith('```')) {
+        cleaned = cleaned
+            .replaceFirst(RegExp(r'^```(?:json)?\s*'), '')
+            .replaceFirst(RegExp(r'\s*```$'), '')
+            .trim();
+      }
+
+      final json = jsonDecode(cleaned) as Map<String, dynamic>;
+      final keywords = (json['keywords'] as List? ?? [])
+          .map((k) => k.toString().trim())
+          .where((k) => k.isNotEmpty)
+          .toList();
+      return keywords;
+    } catch (_) {
+      return [];
+    }
+  }
 
   String _buildPrompt(ProductModel product, UserProfile? profile) {
     final sb = StringBuffer();

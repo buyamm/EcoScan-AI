@@ -241,85 +241,85 @@
   - Test `signOut()` xóa thông tin tài khoản
   - _Requirements: 11.2, 11.5_
 
-- [ ] 14. Hoàn thiện hồ sơ người dùng đầy đủ
-- [ ] 14.1 Mở rộng UserProfile model với dietary preferences
+- [x] 14. Hoàn thiện hồ sơ người dùng đầy đủ
+- [x] 14.1 Mở rộng UserProfile model với dietary preferences
   - Thêm `List<DietaryPreference>` vào `UserProfile` với enum: `glutenFree`, `lactoseFree`, `lowSugar`, `lowSalt`, `keto`, `paleo`
   - Thêm `String? displayName`, `String? email`, `String? photoUrl` vào `UserProfile`
   - Chạy lại `build_runner` để regenerate Hive adapters
   - Cập nhật `UserProfileRepository` để serialize/deserialize các field mới
   - _Requirements: 12.1, 12.2, 12.3, 12.4_
 
-- [ ] 14.2 Implement DietaryPreferenceScreen thực tế
+- [x] 14.2 Implement DietaryPreferenceScreen thực tế
   - Cập nhật `DietaryPreferenceScreen` với multi-select chips cho 6 chế độ ăn
   - Kết nối với `ProfileCubit.updateDietaryPreferences()` để lưu ngay lập tức
   - Hiển thị mô tả ngắn cho từng chế độ ăn
   - _Requirements: 12.3, 12.4_
 
-- [ ] 14.3 Cập nhật ProfileSetupScreen thành wizard đầy đủ
+- [x] 14.3 Cập nhật ProfileSetupScreen thành wizard đầy đủ
   - Cập nhật `ProfileSetupScreen` thành wizard 3 bước: (1) Dị ứng, (2) Lối sống, (3) Chế độ ăn
   - Mỗi bước có nút "Tiếp theo" / "Bỏ qua" / "Quay lại"
   - Bước cuối navigate đến `ProfileCompleteScreen` rồi về `/home`
   - _Requirements: 12.1, 12.2, 12.3, 11.4_
 
-- [ ] 14.4 Cập nhật UserProfileScreen hiển thị đầy đủ 3 nhóm
+- [x] 14.4 Cập nhật UserProfileScreen hiển thị đầy đủ 3 nhóm
   - Hiển thị section "Chế độ ăn" với chips màu cam bên cạnh Dị ứng và Lối sống
   - Thêm nút navigate đến `DietaryPreferenceScreen`
   - Hiển thị avatar Google (photoUrl) nếu đã đăng nhập
   - _Requirements: 12.5_
 
-- [ ] 15. Implement cảnh báo cá nhân hóa theo hồ sơ
-- [ ] 15.1 Cập nhật AIBloc để inject đầy đủ User Profile vào prompt
+- [x] 15. Implement cảnh báo cá nhân hóa theo hồ sơ
+- [x] 15.1 Cập nhật AIBloc để inject đầy đủ User Profile vào prompt
   - Cập nhật `GroqService._buildPrompt()` để inject cả `allergies`, `lifestyle` và `dietaryPreferences` vào prompt
   - Sau `AISuccess`, kiểm tra xung đột allergen: so sánh `analysis.ingredients` với `profile.allAllergies`
   - Sau `AISuccess`, kiểm tra xung đột lối sống: dùng `analysis.ethics` và `analysis.suitableFor/notSuitableFor`
   - Emit `AISuccess` với thêm fields: `allergenConflicts: List<String>`, `lifestyleConflicts: List<LifestyleOption>`
   - _Requirements: 13.1, 13.2, 13.3_
 
-- [ ] 15.2 Implement luồng cảnh báo sau khi phân tích AI
+- [x] 15.2 Implement luồng cảnh báo sau khi phân tích AI
   - Cập nhật màn hình `AILoadingScreen` listener: sau `AISuccess`, nếu có `allergenConflicts` → navigate đến `/product/allergen`, nếu có `lifestyleConflicts` → navigate đến `/product/lifestyle`, nếu không → navigate đến `/product/score`
   - Cập nhật `AllergenWarningScreen` hiển thị danh sách thành phần gây dị ứng cụ thể với nút "Vẫn xem chi tiết"
   - Cập nhật `LifestyleConflictScreen` hiển thị thành phần xung đột lối sống với giải thích
   - _Requirements: 13.1, 13.2_
 
-- [ ] 15.3 Thêm section "Phù hợp với bạn" vào ProductDetailScreen
+- [x] 15.3 Thêm section "Phù hợp với bạn" vào ProductDetailScreen
   - Thêm widget `_PersonalizedSection` vào `ProductDetailScreen` khi có cả `analysis` và `userProfile`
   - Hiển thị danh sách thành phần an toàn (xanh) và thành phần cần chú ý (đỏ) dựa trên hồ sơ
   - Nếu chưa có hồ sơ, hiển thị banner gợi ý thiết lập hồ sơ với nút navigate đến `/profile/setup`
   - _Requirements: 13.4, 13.5_
 
-- [ ] 16. Implement biểu đồ thực cho Dashboard
-- [ ] 16.1 Implement WeeklyReportScreen với bar chart thực
+- [x] 16. Implement biểu đồ thực cho Dashboard
+- [x] 16.1 Implement WeeklyReportScreen với bar chart thực
   - Tính toán dữ liệu 7 ngày gần nhất từ `HistoryCubit.state.allRecords`
   - Render `BarChart` (fl_chart) với 7 cột, mỗi cột stack 3 màu (green/yellow/red)
   - Hiển thị tooltip khi nhấn vào cột: ngày, số lượng, điểm trung bình
   - _Requirements: 14.1, 14.4_
 
-- [ ] 16.2 Implement MonthlyReportScreen với line chart thực
+- [x] 16.2 Implement MonthlyReportScreen với line chart thực
   - Tính toán điểm trung bình theo tuần trong 4 tuần gần nhất từ ScanHistory
   - Render `LineChart` (fl_chart) với 4 điểm dữ liệu, đường xu hướng
   - Hiển thị tooltip khi nhấn vào điểm: tuần, điểm trung bình, số lần quét
   - _Requirements: 14.2, 14.4_
 
-- [ ] 16.3 Implement ImpactChartScreen với pie chart thực
+- [x] 16.3 Implement ImpactChartScreen với pie chart thực
   - Tính toán tỷ lệ 🟢🟡🔴 từ toàn bộ ScanHistory
   - Render `PieChart` (fl_chart) với 3 phần, legend bên dưới
   - Xử lý trường hợp ít hơn 3 bản ghi → hiển thị `ImpactEmptyScreen`
   - _Requirements: 14.3, 14.5_
 
-- [ ] 17. Hoàn thiện luồng gợi ý sản phẩm thay thế
-- [ ] 17.1 Cập nhật OpenFoodFactsService.searchAlternatives()
+- [x] 17. Hoàn thiện luồng gợi ý sản phẩm thay thế
+- [x] 17.1 Cập nhật OpenFoodFactsService.searchAlternatives()
   - Cập nhật `searchAlternatives()` để gọi `GET /cgi/search.pl?action=process&tagtype_0=categories&tag_0={category}&json=1&page_size=10`
   - Lọc kết quả: loại bỏ sản phẩm trùng barcode, sắp xếp theo `nutriscore_grade` tốt hơn
   - Nếu `category` trống, dùng `product.labels_tags[0]` làm fallback
   - _Requirements: 15.1, 15.4_
 
-- [ ] 17.2 Implement ProductCompareScreen thực tế
+- [x] 17.2 Implement ProductCompareScreen thực tế
   - Cập nhật `ProductCompareScreen` hiển thị bảng so sánh 2 cột: sản phẩm gốc vs thay thế
   - So sánh: Eco Score (gauge nhỏ), điểm sức khỏe, điểm môi trường, số thành phần, Nutri-Score
   - Nút "Chọn sản phẩm này" trên cột thay thế để navigate đến `AlternativeDetailScreen`
   - _Requirements: 15.3_
 
-- [ ] 17.3 Lọc sản phẩm thay thế theo User Profile
+- [x] 17.3 Lọc sản phẩm thay thế theo User Profile
   - Trong `AlternativeProductsScreen._loadAlternatives()`, sau khi nhận kết quả từ API, lọc bỏ sản phẩm chứa allergens từ `ProfileCubit.state.profile.allAllergies`
   - Hiển thị badge "Phù hợp với bạn ✓" trên sản phẩm thay thế không có xung đột
   - _Requirements: 15.5_

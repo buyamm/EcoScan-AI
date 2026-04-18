@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../../data/models/ai_analysis_model.dart';
 import '../../data/models/product_model.dart';
 import '../../core/theme/app_theme.dart';
@@ -88,6 +89,18 @@ class ProductCompareScreen extends StatelessWidget {
           ),
           const SizedBox(height: 16),
 
+          // Nutri-Score
+          const SectionHeader(title: 'Nutri-Score'),
+          _CompareRow(
+            label: 'Nutri-Score',
+            widgetA: _NutriScoreTag(grade: productA.nutriScore),
+            widgetB: _NutriScoreTag(grade: productB.nutriScore),
+            scoreA: _nutriScoreValue(productA.nutriScore),
+            scoreB: _nutriScoreValue(productB.nutriScore),
+            higherIsBetter: false, // lower letter = better (a < b < c...)
+          ),
+          const SizedBox(height: 16),
+
           // Ingredients count
           const SectionHeader(title: 'Thành phần'),
           _CompareRow(
@@ -130,6 +143,25 @@ class ProductCompareScreen extends StatelessWidget {
             nameA: productA.name,
             nameB: productB.name,
           ),
+          const SizedBox(height: 16),
+
+          // "Chọn sản phẩm này" button for the alternative (productB)
+          SizedBox(
+            width: double.infinity,
+            child: ElevatedButton.icon(
+              onPressed: () =>
+                  context.go('/product/alternatives/detail', extra: productB),
+              icon: const Icon(Icons.check_circle_outline),
+              label: Text(
+                productB.name.isNotEmpty
+                    ? 'Chọn "${productB.name}"'
+                    : 'Chọn sản phẩm này',
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ),
+          const SizedBox(height: 8),
         ],
       ),
     );
@@ -139,6 +171,13 @@ class ProductCompareScreen extends StatelessWidget {
       analysis.ingredients
           .where((i) => i.safety == IngredientSafety.avoid)
           .length;
+
+  /// Maps nutriscore letter to a numeric value for comparison (lower = better).
+  int _nutriScoreValue(String? grade) {
+    const order = ['a', 'b', 'c', 'd', 'e'];
+    final idx = order.indexOf(grade?.toLowerCase() ?? '');
+    return idx == -1 ? 99 : idx;
+  }
 }
 
 class _ProductHeader extends StatelessWidget {
@@ -359,5 +398,47 @@ class _Recommendation extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class _NutriScoreTag extends StatelessWidget {
+  final String? grade;
+
+  const _NutriScoreTag({this.grade});
+
+  @override
+  Widget build(BuildContext context) {
+    if (grade == null || grade!.isEmpty) {
+      return Text('N/A', style: TextStyle(color: Colors.grey[500], fontSize: 13));
+    }
+    final color = _colorForGrade(grade!.toLowerCase());
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+      decoration: BoxDecoration(
+        color: color.withOpacity(0.12),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: color.withOpacity(0.4)),
+      ),
+      child: Text(
+        grade!.toUpperCase(),
+        style: TextStyle(
+            fontSize: 13, color: color, fontWeight: FontWeight.w700),
+      ),
+    );
+  }
+
+  Color _colorForGrade(String g) {
+    switch (g) {
+      case 'a':
+        return AppColors.primary;
+      case 'b':
+        return const Color(0xFF558B2F);
+      case 'c':
+        return AppColors.warning;
+      case 'd':
+        return const Color(0xFFE65100);
+      default:
+        return AppColors.danger;
+    }
   }
 }
