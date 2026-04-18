@@ -5,6 +5,7 @@ import '../blocs/history/history_cubit.dart';
 import '../blocs/settings/settings_cubit.dart';
 import '../../core/theme/app_theme.dart';
 import '../../data/models/ai_analysis_model.dart';
+import '../../l10n/app_localizations.dart';
 
 class HomeScreen extends StatefulWidget {
   final Widget child;
@@ -27,6 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final location = GoRouterState.of(context).uri.toString();
     final currentIndex = _indexForLocation(location);
 
@@ -35,26 +37,26 @@ class _HomeScreenState extends State<HomeScreen> {
       bottomNavigationBar: NavigationBar(
         selectedIndex: currentIndex,
         onDestinationSelected: (i) => context.go(_tabs[i]),
-        destinations: const [
+        destinations: [
           NavigationDestination(
-            icon: Icon(Icons.home_outlined),
-            selectedIcon: Icon(Icons.home),
-            label: 'Trang chủ',
+            icon: const Icon(Icons.home_outlined),
+            selectedIcon: const Icon(Icons.home),
+            label: l10n.home,
           ),
           NavigationDestination(
-            icon: Icon(Icons.qr_code_scanner_outlined),
-            selectedIcon: Icon(Icons.qr_code_scanner),
-            label: 'Quét',
+            icon: const Icon(Icons.qr_code_scanner_outlined),
+            selectedIcon: const Icon(Icons.qr_code_scanner),
+            label: l10n.scan,
           ),
           NavigationDestination(
-            icon: Icon(Icons.history_outlined),
-            selectedIcon: Icon(Icons.history),
-            label: 'Lịch sử',
+            icon: const Icon(Icons.history_outlined),
+            selectedIcon: const Icon(Icons.history),
+            label: l10n.history,
           ),
           NavigationDestination(
-            icon: Icon(Icons.person_outline),
-            selectedIcon: Icon(Icons.person),
-            label: 'Hồ sơ',
+            icon: const Icon(Icons.person_outline),
+            selectedIcon: const Icon(Icons.person),
+            label: l10n.profile,
           ),
         ],
       ),
@@ -67,6 +69,7 @@ class DashboardScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final settingsState = context.watch<SettingsCubit>().state;
     final historyState = context.watch<HistoryCubit>().state;
 
@@ -96,7 +99,6 @@ class DashboardScreen extends StatelessWidget {
         child: ListView(
           padding: const EdgeInsets.all(16),
           children: [
-            // Welcome banner
             Container(
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
@@ -111,9 +113,7 @@ class DashboardScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    settingsState.onboardingDone
-                        ? 'Chào mừng trở lại! 🌿'
-                        : 'Chào mừng đến EcoScan AI! 🌿',
+                    '${l10n.homeWelcome} 🌿',
                     style: const TextStyle(
                       color: Colors.white,
                       fontSize: 18,
@@ -121,9 +121,9 @@ class DashboardScreen extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 6),
-                  const Text(
-                    'Quét sản phẩm để biết mức độ bền vững',
-                    style: TextStyle(color: Colors.white70, fontSize: 13),
+                  Text(
+                    l10n.homeSubtitle,
+                    style: const TextStyle(color: Colors.white70, fontSize: 13),
                   ),
                   const SizedBox(height: 16),
                   ElevatedButton.icon(
@@ -133,37 +133,36 @@ class DashboardScreen extends StatelessWidget {
                       foregroundColor: AppColors.primary,
                     ),
                     icon: const Icon(Icons.qr_code_scanner, size: 18),
-                    label: const Text('Quét ngay'),
+                    label: Text(l10n.homeScanNow),
                   ),
                 ],
               ),
             ),
             const SizedBox(height: 20),
-            // Quick stats
             if (totalScans > 0) ...[
-              const Text(
-                'Thống kê nhanh',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+              Text(
+                l10n.homeQuickStats,
+                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
               ),
               const SizedBox(height: 12),
               Row(
                 children: [
                   _StatCard(
-                    label: 'Đã quét',
+                    label: l10n.totalScans,
                     value: '$totalScans',
                     icon: Icons.qr_code_2,
                     color: AppColors.primary,
                   ),
                   const SizedBox(width: 10),
                   _StatCard(
-                    label: '🟢 Tốt',
+                    label: '🟢 ${l10n.good}',
                     value: '$greenScans',
                     icon: Icons.eco,
                     color: AppColors.primary,
                   ),
                   const SizedBox(width: 10),
                   _StatCard(
-                    label: '🔴 Kém',
+                    label: '🔴 ${l10n.poor}',
                     value: '$redScans',
                     icon: Icons.warning_amber,
                     color: AppColors.danger,
@@ -172,7 +171,7 @@ class DashboardScreen extends StatelessWidget {
               ),
               const SizedBox(height: 8),
               _StatCard(
-                label: '🟡 Trung bình',
+                label: '🟡 ${l10n.average}',
                 value: '$yellowScans',
                 icon: Icons.remove_circle_outline,
                 color: AppColors.warning,
@@ -183,24 +182,23 @@ class DashboardScreen extends StatelessWidget {
               _EmptyStatsBanner(onScan: () => context.go('/scan')),
               const SizedBox(height: 20),
             ],
-            // Impact shortcut
             _ImpactShortcut(
               totalScans: totalScans,
               onTap: () => context.push('/impact'),
             ),
             const SizedBox(height: 20),
-            // Recent scans
             if (historyState.allRecords.isNotEmpty) ...[
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text(
-                    'Quét gần đây',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+                  Text(
+                    l10n.homeRecentScans,
+                    style: const TextStyle(
+                        fontSize: 16, fontWeight: FontWeight.w700),
                   ),
                   TextButton(
                     onPressed: () => context.go('/history'),
-                    child: const Text('Xem tất cả'),
+                    child: Text(l10n.seeAll),
                   ),
                 ],
               ),
@@ -218,9 +216,7 @@ class DashboardScreen extends StatelessWidget {
                       ),
                     ),
                     title: Text(
-                      r.product.name.isNotEmpty
-                          ? r.product.name
-                          : 'Sản phẩm không tên',
+                      r.product.name.isNotEmpty ? r.product.name : l10n.noData,
                       style: const TextStyle(
                           fontWeight: FontWeight.w500, fontSize: 14),
                       maxLines: 1,
@@ -228,12 +224,10 @@ class DashboardScreen extends StatelessWidget {
                     ),
                     subtitle: Text(
                       r.product.brand.isNotEmpty ? r.product.brand : 'N/A',
-                      style:
-                          TextStyle(fontSize: 12, color: Colors.grey[500]),
+                      style: TextStyle(fontSize: 12, color: Colors.grey[500]),
                     ),
                     trailing: const Icon(Icons.chevron_right, size: 18),
-                    onTap: () =>
-                        context.go('/history/detail', extra: r),
+                    onTap: () => context.push('/history/detail', extra: r),
                   )),
             ],
           ],
@@ -280,12 +274,10 @@ class _StatCard extends StatelessWidget {
               color: color,
             ),
           ),
-          Text(label,
-              style: TextStyle(fontSize: 12, color: Colors.grey[600])),
+          Text(label, style: TextStyle(fontSize: 12, color: Colors.grey[600])),
         ],
       ),
     );
-
     return fullWidth ? card : Expanded(child: card);
   }
 }
@@ -298,6 +290,7 @@ class _ImpactShortcut extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(14),
@@ -324,15 +317,12 @@ class _ImpactShortcut extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text('Tác động cá nhân',
-                      style: TextStyle(
+                  Text(l10n.personalImpact,
+                      style: const TextStyle(
                           fontSize: 14, fontWeight: FontWeight.w700)),
                   Text(
-                    totalScans > 0
-                        ? 'Xem biểu đồ tuần, tháng & phân bổ'
-                        : 'Quét sản phẩm để xem thống kê',
-                    style:
-                        TextStyle(fontSize: 12, color: Colors.grey[600]),
+                    totalScans > 0 ? l10n.impactChart : l10n.impactEmptyHint,
+                    style: TextStyle(fontSize: 12, color: Colors.grey[600]),
                   ),
                 ],
               ),
@@ -352,6 +342,7 @@ class _EmptyStatsBanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Container(
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
@@ -362,19 +353,19 @@ class _EmptyStatsBanner extends StatelessWidget {
         children: [
           const Text('🛒', style: TextStyle(fontSize: 48)),
           const SizedBox(height: 12),
-          const Text(
-            'Chưa có sản phẩm nào được quét',
-            style: TextStyle(fontWeight: FontWeight.w600, fontSize: 15),
+          Text(
+            l10n.historyEmpty,
+            style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 15),
           ),
           const SizedBox(height: 6),
           Text(
-            'Quét sản phẩm đầu tiên để xem thống kê',
+            l10n.historyEmptyHint,
             style: TextStyle(color: Colors.grey[600], fontSize: 13),
           ),
           const SizedBox(height: 16),
           ElevatedButton(
             onPressed: onScan,
-            child: const Text('Quét ngay'),
+            child: Text(l10n.homeScanNow),
           ),
         ],
       ),

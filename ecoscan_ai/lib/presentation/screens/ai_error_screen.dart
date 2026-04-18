@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import '../blocs/ai/ai_bloc.dart';
 import '../../core/theme/app_theme.dart';
+import '../../l10n/app_localizations.dart';
 
 class AIErrorScreen extends StatelessWidget {
   final String? message;
@@ -11,8 +12,9 @@ class AIErrorScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Scaffold(
-      appBar: AppBar(title: const Text('Lỗi phân tích AI')),
+      appBar: AppBar(title: Text(l10n.aiError)),
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(32),
@@ -33,13 +35,13 @@ class AIErrorScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 24),
-              const Text(
-                'Không thể phân tích',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+              Text(
+                l10n.aiError,
+                style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
               ),
               const SizedBox(height: 12),
               Text(
-                message ?? 'Đã xảy ra lỗi khi gửi yêu cầu phân tích AI.',
+                message ?? l10n.aiErrorHint,
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 14, color: Colors.grey[600], height: 1.5),
               ),
@@ -49,10 +51,10 @@ class AIErrorScreen extends StatelessWidget {
                 child: ElevatedButton.icon(
                   onPressed: () {
                     context.read<AIBloc>().add(RetryAnalysis());
-                    context.go('/ai/loading');
+                    context.push('/ai/loading');
                   },
                   icon: const Icon(Icons.refresh),
-                  label: const Text('Thử lại'),
+                  label: Text(l10n.retry),
                 ),
               ),
               const SizedBox(height: 12),
@@ -60,7 +62,7 @@ class AIErrorScreen extends StatelessWidget {
                 width: double.infinity,
                 child: OutlinedButton(
                   onPressed: () => context.go('/home'),
-                  child: const Text('Về trang chủ'),
+                  child: Text(l10n.goHome),
                 ),
               ),
               const SizedBox(height: 12),
@@ -68,7 +70,7 @@ class AIErrorScreen extends StatelessWidget {
                 width: double.infinity,
                 child: TextButton(
                   onPressed: () => context.pop(),
-                  child: const Text('Quay lại'),
+                  child: Text(l10n.back),
                 ),
               ),
             ],

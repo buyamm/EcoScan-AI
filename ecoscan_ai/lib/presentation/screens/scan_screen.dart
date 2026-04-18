@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import '../blocs/scan/scan_bloc.dart';
 import '../../core/theme/app_theme.dart';
+import '../../l10n/app_localizations.dart';
 
 class ScanScreen extends StatefulWidget {
   const ScanScreen({super.key});
@@ -75,7 +76,7 @@ class _ScanScreenState extends State<ScanScreen> with WidgetsBindingObserver {
         appBar: AppBar(
           backgroundColor: Colors.black,
           foregroundColor: Colors.white,
-          title: const Text('Quét mã vạch'),
+          title: Text(AppLocalizations.of(context).scanBarcode),
           actions: [
             IconButton(
               icon: const Icon(Icons.lightbulb_outline),
@@ -120,17 +121,17 @@ class _ScanScreenState extends State<ScanScreen> with WidgetsBindingObserver {
                   children: [
                     _ActionButton(
                       icon: Icons.text_fields,
-                      label: 'Quét OCR',
+                      label: AppLocalizations.of(context).scanOCR,
                       onTap: () => context.go('/scan/ocr'),
                     ),
                     _ActionButton(
                       icon: Icons.keyboard,
-                      label: 'Nhập tay',
+                      label: AppLocalizations.of(context).manualInput,
                       onTap: () => context.go('/scan/manual'),
                     ),
                     _ActionButton(
                       icon: Icons.help_outline,
-                      label: 'Mẹo quét',
+                      label: AppLocalizations.of(context).scanTips,
                       onTap: () => context.go('/scan/tips'),
                     ),
                   ],

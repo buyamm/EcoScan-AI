@@ -5,6 +5,7 @@ import '../blocs/scan/scan_bloc.dart';
 import '../blocs/ai/ai_bloc.dart';
 import '../blocs/profile/profile_cubit.dart';
 import '../../core/theme/app_theme.dart';
+import '../../l10n/app_localizations.dart';
 
 class ScanLoadingScreen extends StatelessWidget {
   final String barcode;
@@ -75,14 +76,14 @@ class ScanLoadingScreen extends StatelessWidget {
                 child: const _PulseIcon(),
               ),
               const SizedBox(height: 28),
-              const Text(
-                'Đang tìm sản phẩm...',
-                style: TextStyle(
+              Text(
+                AppLocalizations.of(context).scanLoading,
+                style: const TextStyle(
                     fontSize: 18, fontWeight: FontWeight.w600),
               ),
               const SizedBox(height: 8),
               Text(
-                'Mã vạch: $barcode',
+                barcode,
                 style: TextStyle(fontSize: 13, color: Colors.grey[500]),
               ),
               const SizedBox(height: 24),
@@ -93,7 +94,7 @@ class ScanLoadingScreen extends StatelessWidget {
               const SizedBox(height: 32),
               TextButton(
                 onPressed: () => context.go('/scan'),
-                child: const Text('Hủy'),
+                child: Text(AppLocalizations.of(context).cancel),
               ),
             ],
           ),

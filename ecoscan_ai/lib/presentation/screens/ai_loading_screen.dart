@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../blocs/ai/ai_bloc.dart';
 import '../blocs/profile/profile_cubit.dart';
 import '../../core/theme/app_theme.dart';
+import '../../l10n/app_localizations.dart';
 
 class AILoadingScreen extends StatelessWidget {
   const AILoadingScreen({super.key});
@@ -51,13 +52,13 @@ class AILoadingScreen extends StatelessWidget {
               children: [
                 const _PulsingBrainIcon(),
                 const SizedBox(height: 28),
-                const Text(
-                  'Đang phân tích AI...',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                Text(
+                  AppLocalizations.of(context).aiAnalyzing,
+                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'AI đang đánh giá thành phần sản phẩm',
+                  AppLocalizations.of(context).aiLoading,
                   style: TextStyle(fontSize: 13, color: Colors.grey[500]),
                 ),
                 const SizedBox(height: 24),
@@ -68,7 +69,7 @@ class AILoadingScreen extends StatelessWidget {
                 const SizedBox(height: 32),
                 TextButton(
                   onPressed: () => context.go('/scan'),
-                  child: const Text('Hủy'),
+                  child: Text(AppLocalizations.of(context).cancel),
                 ),
               ],
             ),

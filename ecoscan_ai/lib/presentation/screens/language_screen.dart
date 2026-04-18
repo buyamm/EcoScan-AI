@@ -1,22 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../core/theme/app_theme.dart';
+import '../../l10n/app_localizations.dart';
 import '../blocs/settings/settings_cubit.dart';
 
 class LanguageScreen extends StatelessWidget {
   const LanguageScreen({super.key});
 
   static const _languages = [
-    _Language('vi', 'Tiếng Việt', '🇻🇳'),
-    _Language('en', 'English', '🇬🇧'),
+    _Language('vi', '🇻🇳'),
+    _Language('en', '🇬🇧'),
   ];
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return BlocBuilder<SettingsCubit, SettingsState>(
       builder: (context, state) {
         return Scaffold(
-          appBar: AppBar(title: const Text('Ngôn ngữ')),
+          appBar: AppBar(title: Text(l10n.language)),
           body: ListView(
             padding: const EdgeInsets.all(16),
             children: [
@@ -26,14 +28,14 @@ class LanguageScreen extends StatelessWidget {
                   color: AppColors.primary.withOpacity(0.07),
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: const Row(
+                child: Row(
                   children: [
-                    Icon(Icons.translate, color: AppColors.primary),
-                    SizedBox(width: 10),
+                    const Icon(Icons.translate, color: AppColors.primary),
+                    const SizedBox(width: 10),
                     Expanded(
                       child: Text(
-                        'Ngôn ngữ sẽ được thay đổi ngay lập tức, không cần khởi động lại.',
-                        style: TextStyle(fontSize: 13, height: 1.4),
+                        l10n.languageHint,
+                        style: const TextStyle(fontSize: 13, height: 1.4),
                       ),
                     ),
                   ],
@@ -42,6 +44,7 @@ class LanguageScreen extends StatelessWidget {
               const SizedBox(height: 20),
               ..._languages.map((lang) {
                 final selected = state.languageCode == lang.code;
+                final name = lang.code == 'vi' ? l10n.vietnamese : l10n.english;
                 return Card(
                   margin: const EdgeInsets.only(bottom: 8),
                   shape: RoundedRectangleBorder(
@@ -55,7 +58,7 @@ class LanguageScreen extends StatelessWidget {
                     leading: Text(lang.flag,
                         style: const TextStyle(fontSize: 28)),
                     title: Text(
-                      lang.name,
+                      name,
                       style: TextStyle(
                         fontWeight: FontWeight.w600,
                         color: selected ? AppColors.primary : null,
@@ -80,8 +83,7 @@ class LanguageScreen extends StatelessWidget {
 
 class _Language {
   final String code;
-  final String name;
   final String flag;
 
-  const _Language(this.code, this.name, this.flag);
+  const _Language(this.code, this.flag);
 }
