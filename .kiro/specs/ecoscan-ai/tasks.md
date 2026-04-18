@@ -220,15 +220,15 @@
 
 ## Các Task Bổ Sung
 
-- [-] 13. Implement Google Sign-In
-- [ ] 13.1 Thêm dependency và cấu hình Google Sign-In
+- [x] 13. Implement Google Sign-In
+- [x] 13.1 Thêm dependency và cấu hình Google Sign-In
   - Thêm `google_sign_in: ^6.x` vào `pubspec.yaml`
   - Cấu hình `google-services.json` (Android) và `GoogleService-Info.plist` (iOS) — hướng dẫn trong README
   - Tạo `AuthRepository` với `signInWithGoogle()`, `signOut()`, `getCurrentUser()` trả về `GoogleSignInAccount?`
   - Lưu `displayName`, `email`, `photoUrl` vào `UserProfile` qua `UserProfileRepository`
   - _Requirements: 11.1, 11.2, 11.5_
 
-- [ ] 13.2 Implement màn hình Login và luồng xác thực
+- [x] 13.2 Implement màn hình Login và luồng xác thực
   - Tạo `LoginScreen` (`/login`) với nút "Đăng nhập bằng Google" và nút "Tiếp tục không đăng nhập"
   - Tạo `AuthCubit` với states: `AuthInitial`, `AuthLoading`, `AuthAuthenticated(user)`, `AuthGuest`, `AuthError`
   - Cập nhật `SplashScreen` để kiểm tra trạng thái auth: nếu đã đăng nhập → `/home`, nếu chưa → `/login`

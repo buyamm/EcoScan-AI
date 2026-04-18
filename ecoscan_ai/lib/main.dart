@@ -6,6 +6,7 @@ import 'l10n/app_localizations.dart';
 import 'core/theme/app_theme.dart';
 import 'core/utils/hive_init.dart';
 import 'core/router/app_router.dart';
+import 'data/repositories/auth_repository.dart';
 import 'data/repositories/settings_repository.dart';
 import 'data/repositories/user_profile_repository.dart';
 import 'data/repositories/scan_history_repository.dart';
@@ -14,6 +15,7 @@ import 'data/services/groq_service.dart';
 import 'data/services/open_food_facts_service.dart';
 import 'data/services/ocr_service.dart';
 import 'presentation/blocs/ai/ai_bloc.dart';
+import 'presentation/blocs/auth/auth_cubit.dart';
 import 'presentation/blocs/history/history_cubit.dart';
 import 'presentation/blocs/ocr/ocr_bloc.dart';
 import 'presentation/blocs/profile/profile_cubit.dart';
@@ -28,12 +30,14 @@ void main() async {
   final userProfileRepo = UserProfileRepository(prefs);
   final scanHistoryRepo = ScanHistoryRepository();
   final productCacheRepo = ProductCacheRepository();
+  final authRepo = AuthRepository(prefs: prefs, profileRepo: userProfileRepo);
 
   runApp(EcoScanApp(
     settingsRepo: settingsRepo,
     userProfileRepo: userProfileRepo,
     scanHistoryRepo: scanHistoryRepo,
     productCacheRepo: productCacheRepo,
+    authRepo: authRepo,
   ));
 }
 
@@ -42,6 +46,7 @@ class EcoScanApp extends StatelessWidget {
   final UserProfileRepository userProfileRepo;
   final ScanHistoryRepository scanHistoryRepo;
   final ProductCacheRepository productCacheRepo;
+  final AuthRepository authRepo;
 
   const EcoScanApp({
     super.key,
@@ -49,6 +54,7 @@ class EcoScanApp extends StatelessWidget {
     required this.userProfileRepo,
     required this.scanHistoryRepo,
     required this.productCacheRepo,
+    required this.authRepo,
   });
 
   @override
@@ -57,6 +63,9 @@ class EcoScanApp extends StatelessWidget {
       providers: [
         BlocProvider(
           create: (_) => SettingsCubit(repo: settingsRepo),
+        ),
+        BlocProvider(
+          create: (_) => AuthCubit(authRepo: authRepo),
         ),
         BlocProvider(
           create: (_) => ProfileCubit(repo: userProfileRepo),

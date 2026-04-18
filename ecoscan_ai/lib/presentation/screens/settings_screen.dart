@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import '../../core/theme/app_theme.dart';
+import '../blocs/auth/auth_cubit.dart';
 import '../blocs/settings/settings_cubit.dart';
 
 class SettingsScreen extends StatelessWidget {
@@ -147,6 +148,69 @@ class SettingsScreen extends StatelessWidget {
                 onTap: () => context.push('/settings/credits'),
               ),
             ],
+          ),
+          // Sign out section (only shown when signed in)
+          BlocBuilder<AuthCubit, AuthState>(
+            builder: (context, authState) {
+              if (!authState.isAuthenticated) return const SizedBox.shrink();
+              return _SettingsSection(
+                title: 'Tài khoản',
+                children: [
+                  ListTile(
+                    leading: authState.user?.photoUrl != null
+                        ? CircleAvatar(
+                            backgroundImage:
+                                NetworkImage(authState.user!.photoUrl!),
+                            radius: 16,
+                          )
+                        : const Icon(Icons.account_circle,
+                            color: AppColors.primary),
+                    title: Text(
+                      authState.user?.displayName ?? 'Người dùng',
+                      style: const TextStyle(
+                          fontSize: 14, fontWeight: FontWeight.w500),
+                    ),
+                    subtitle: Text(
+                      authState.user?.email ?? '',
+                      style:
+                          TextStyle(fontSize: 12, color: Colors.grey[600]),
+                    ),
+                  ),
+                  _SettingsTile(
+                    icon: Icons.logout,
+                    title: 'Đăng xuất',
+                    iconColor: AppColors.danger,
+                    titleColor: AppColors.danger,
+                    onTap: () async {
+                      final confirm = await showDialog<bool>(
+                        context: context,
+                        builder: (ctx) => AlertDialog(
+                          title: const Text('Đăng xuất'),
+                          content: const Text(
+                              'Lịch sử quét và hồ sơ sẽ được giữ lại. Bạn có muốn đăng xuất không?'),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.pop(ctx, false),
+                              child: const Text('Hủy'),
+                            ),
+                            TextButton(
+                              onPressed: () => Navigator.pop(ctx, true),
+                              child: const Text('Đăng xuất',
+                                  style:
+                                      TextStyle(color: AppColors.danger)),
+                            ),
+                          ],
+                        ),
+                      );
+                      if (confirm == true && context.mounted) {
+                        await context.read<AuthCubit>().signOut();
+                        context.go('/login');
+                      }
+                    },
+                  ),
+                ],
+              );
+            },
           ),
           const SizedBox(height: 24),
         ],

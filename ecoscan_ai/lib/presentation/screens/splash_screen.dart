@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import '../blocs/auth/auth_cubit.dart';
 import '../blocs/settings/settings_cubit.dart';
 import '../../core/theme/app_theme.dart';
 
@@ -39,10 +40,16 @@ class _SplashScreenState extends State<SplashScreen>
     if (!mounted) return;
     final onboardingDone =
         context.read<SettingsCubit>().state.onboardingDone;
-    if (onboardingDone) {
+    if (!onboardingDone) {
+      context.go('/onboarding/1');
+      return;
+    }
+    // Check if user has seen login screen before
+    final authState = context.read<AuthCubit>().state;
+    if (authState.isAuthenticated || authState.isGuest) {
       context.go('/home');
     } else {
-      context.go('/onboarding/1');
+      context.go('/login');
     }
   }
 

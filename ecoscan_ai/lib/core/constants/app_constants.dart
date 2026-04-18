@@ -28,6 +28,9 @@ class AppConstants {
   static const int maxScanHistory = 500;
   static const int productCacheDays = 7;
 
+  // Auth
+  static const String keyGoogleUser = 'google_user';
+
   // Eco Score thresholds
   static const int ecoScoreGoodMin = 70;
   static const int ecoScoreAverageMin = 40;

@@ -5,6 +5,7 @@ import '../../data/models/ai_analysis_model.dart';
 import '../../data/models/product_model.dart';
 import '../../data/models/scan_record.dart';
 import '../../data/models/user_profile.dart';
+import '../../presentation/screens/login_screen.dart';
 import '../../presentation/screens/about_screen.dart';
 import '../../presentation/screens/achievement_detail_screen.dart';
 import '../../presentation/screens/achievement_list_screen.dart';
@@ -133,6 +134,10 @@ class AppRouter {
         GoRoute(
           path: '/splash',
           builder: (_, __) => const SplashScreen(),
+        ),
+        GoRoute(
+          path: '/login',
+          builder: (_, __) => const LoginScreen(),
         ),
         GoRoute(
           path: '/onboarding/:page',

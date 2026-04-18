@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "662379212678",
+    "project_id": "ecoscan-ai-57e60",
+    "storage_bucket": "ecoscan-ai-57e60.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:662379212678:android:c4c3210c3b509b9f7e4607",
+        "android_client_info": {
+          "package_name": "com.ecoscan.ecoscan_ai"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "662379212678-8q0rj67tkoohk9f5de755ql1cc5neff7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ecoscan.ecoscan_ai",
+            "certificate_hash": "6ae62d0cf3d9bc68ebb3252013126c692495d663"
+          }
+        },
+        {
+          "client_id": "662379212678-dvtmfgjlepg8em791usjla480ftms6hs.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBlIrbw2GhNJWGomosb1jcoiBkJdcgZ4_I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "662379212678-dvtmfgjlepg8em791usjla480ftms6hs.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

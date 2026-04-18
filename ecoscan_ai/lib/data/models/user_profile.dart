@@ -28,26 +28,39 @@ class UserProfile extends HiveObject {
   @HiveField(3)
   final List<String> customAllergies;
 
+  // HiveField 4 & 5 reserved for future Hive persistence;
+  // currently stored only in JSON via SharedPreferences.
+  final String? email;
+  final String? photoUrl;
+
   UserProfile({
     this.displayName = '',
     this.allergies = const [],
     this.lifestyle = const [],
     this.customAllergies = const [],
+    this.email,
+    this.photoUrl,
   });
 
   List<String> get allAllergies => [...allergies, ...customAllergies];
+
+  bool get isGoogleSignedIn => email != null && email!.isNotEmpty;
 
   UserProfile copyWith({
     String? displayName,
     List<String>? allergies,
     List<LifestyleOption>? lifestyle,
     List<String>? customAllergies,
+    String? email,
+    String? photoUrl,
   }) =>
       UserProfile(
         displayName: displayName ?? this.displayName,
         allergies: allergies ?? this.allergies,
         lifestyle: lifestyle ?? this.lifestyle,
         customAllergies: customAllergies ?? this.customAllergies,
+        email: email ?? this.email,
+        photoUrl: photoUrl ?? this.photoUrl,
       );
 
   Map<String, dynamic> toJson() => {
@@ -55,6 +68,8 @@ class UserProfile extends HiveObject {
         'allergies': allergies,
         'lifestyle': lifestyle.map((e) => e.name).toList(),
         'customAllergies': customAllergies,
+        'email': email,
+        'photoUrl': photoUrl,
       };
 
   factory UserProfile.fromJson(Map<String, dynamic> json) => UserProfile(
@@ -67,6 +82,8 @@ class UserProfile extends HiveObject {
                 ))
             .toList(),
         customAllergies: List<String>.from(json['customAllergies'] ?? []),
+        email: json['email']?.toString(),
+        photoUrl: json['photoUrl']?.toString(),
       );
 
   static const List<String> standardAllergens = [
