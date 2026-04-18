@@ -170,7 +170,7 @@ class _OCRScanScreenState extends State<OCRScanScreen>
               right: 0,
               child: Container(
                 color: Colors.black.withOpacity(0.75),
-                padding: const EdgeInsets.fromLTRB(24, 16, 24, 28),
+                padding: EdgeInsets.fromLTRB(24, 16, 24, 28 + MediaQuery.of(context).viewPadding.bottom),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [

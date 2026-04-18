@@ -124,7 +124,7 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(20, 8, 20, 20),
+            padding: EdgeInsets.fromLTRB(20, 8, 20, 20 + MediaQuery.of(context).viewPadding.bottom),
             child: Row(
               children: [
                 if (_page > 0) ...[

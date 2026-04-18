@@ -140,6 +140,7 @@ class ProductFoundScreen extends StatelessWidget {
               onPressed: () => context.go('/scan'),
               child: const Text('Quét sản phẩm khác'),
             ),
+            SizedBox(height: MediaQuery.of(context).viewPadding.bottom),
           ],
         ),
       ),

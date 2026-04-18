@@ -112,7 +112,7 @@ class _TutorialScreenState extends State<TutorialScreen> {
 
           // Navigation buttons
           Padding(
-            padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
+            padding: EdgeInsets.fromLTRB(16, 0, 16, 24 + MediaQuery.of(context).viewPadding.bottom),
             child: Row(
               children: [
                 if (_currentPage > 0)

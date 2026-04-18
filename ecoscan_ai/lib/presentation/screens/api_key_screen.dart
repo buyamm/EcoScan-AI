@@ -58,7 +58,7 @@ class _APIKeyScreenState extends State<APIKeyScreen> {
       ),
       backgroundColor: Colors.black,
       body: Padding(
-        padding: const EdgeInsets.all(20),
+        padding: EdgeInsets.fromLTRB(20, 20, 20, 20 + MediaQuery.of(context).viewPadding.bottom),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

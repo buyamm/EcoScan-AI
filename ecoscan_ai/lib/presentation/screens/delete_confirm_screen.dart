@@ -112,7 +112,7 @@ class _DeleteConfirmScreenState extends State<DeleteConfirmScreen> {
                 child: const Text('Hủy, giữ lại dữ liệu'),
               ),
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: 16 + MediaQuery.of(context).viewPadding.bottom),
           ],
         ),
       ),

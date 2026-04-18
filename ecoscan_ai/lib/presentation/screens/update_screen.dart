@@ -106,6 +106,7 @@ class _UpdateScreenState extends State<UpdateScreen> {
                 label: const Text('Kiểm tra cập nhật'),
               ),
             ),
+            SizedBox(height: MediaQuery.of(context).viewPadding.bottom),
           ],
         ),
       ),

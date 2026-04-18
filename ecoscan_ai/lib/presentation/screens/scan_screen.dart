@@ -114,8 +114,7 @@ class _ScanScreenState extends State<ScanScreen> with WidgetsBindingObserver {
               right: 0,
               child: Container(
                 color: Colors.black.withOpacity(0.7),
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 16, vertical: 20),
+                padding: EdgeInsets.fromLTRB(16, 20, 16, 20 + MediaQuery.of(context).viewPadding.bottom),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [

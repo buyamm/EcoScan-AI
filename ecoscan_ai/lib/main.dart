@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -25,6 +26,14 @@ import 'presentation/blocs/settings/settings_cubit.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  // Enable edge-to-edge on Android — Flutter will report correct window insets
+  // so SafeArea and MediaQuery.viewPadding work properly on gesture-nav devices.
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+    statusBarColor: Colors.transparent,
+    systemNavigationBarColor: Colors.transparent,
+    systemNavigationBarDividerColor: Colors.transparent,
+  ));
   await initHive();
   final prefs = await SharedPreferences.getInstance();
   final settingsRepo = SettingsRepository(prefs);

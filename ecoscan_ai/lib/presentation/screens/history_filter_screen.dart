@@ -96,6 +96,7 @@ class _HistoryFilterScreenState extends State<HistoryFilterScreen> {
                 child: const Text('Áp dụng'),
               ),
             ),
+            SizedBox(height: MediaQuery.of(context).viewPadding.bottom),
           ],
         ),
       ),

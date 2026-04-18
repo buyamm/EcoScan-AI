@@ -125,6 +125,7 @@ class FontSizeScreen extends StatelessWidget {
                     child: const Text('Đặt lại mặc định'),
                   ),
                 ),
+                SizedBox(height: MediaQuery.of(context).viewPadding.bottom),
               ],
             ),
           ),

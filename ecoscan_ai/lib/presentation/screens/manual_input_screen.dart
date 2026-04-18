@@ -47,7 +47,7 @@ class _ManualInputScreenState extends State<ManualInputScreen> {
       child: Scaffold(
         appBar: AppBar(title: const Text('Nhập mã vạch thủ công')),
         body: Padding(
-          padding: const EdgeInsets.all(24),
+          padding: EdgeInsets.fromLTRB(24, 24, 24, 24 + MediaQuery.of(context).viewPadding.bottom),
           child: Form(
             key: _formKey,
             child: Column(

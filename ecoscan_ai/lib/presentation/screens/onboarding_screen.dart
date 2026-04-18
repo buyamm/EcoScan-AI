@@ -84,65 +84,68 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     final isLast = _currentPage == _pages.length - 1;
 
     return Scaffold(
-      body: SafeArea(
-        child: Column(
-          children: [
-            // Skip button
-            Align(
-              alignment: Alignment.topRight,
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: TextButton(
-                  onPressed: _finish,
-                  child: const Text('Bỏ qua'),
+      body: Column(
+        children: [
+          // Respect status bar at top
+          SizedBox(height: MediaQuery.of(context).viewPadding.top),
+          // Skip button
+          Align(
+            alignment: Alignment.topRight,
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: TextButton(
+                onPressed: _finish,
+                child: const Text('Bỏ qua'),
+              ),
+            ),
+          ),
+          // Pages
+          Expanded(
+            child: PageView.builder(
+              controller: _pageController,
+              itemCount: _pages.length,
+              onPageChanged: (i) => setState(() => _currentPage = i),
+              itemBuilder: (_, index) => _OnboardingPageView(
+                page: _pages[index],
+              ),
+            ),
+          ),
+          // Dots indicator
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: List.generate(
+              _pages.length,
+              (i) => AnimatedContainer(
+                duration: const Duration(milliseconds: 250),
+                margin: const EdgeInsets.symmetric(horizontal: 4),
+                width: _currentPage == i ? 24 : 8,
+                height: 8,
+                decoration: BoxDecoration(
+                  color: _currentPage == i
+                      ? AppColors.primary
+                      : AppColors.primary.withOpacity(0.3),
+                  borderRadius: BorderRadius.circular(4),
                 ),
               ),
             ),
-            // Pages
-            Expanded(
-              child: PageView.builder(
-                controller: _pageController,
-                itemCount: _pages.length,
-                onPageChanged: (i) => setState(() => _currentPage = i),
-                itemBuilder: (_, index) => _OnboardingPageView(
-                  page: _pages[index],
-                ),
+          ),
+          const SizedBox(height: 32),
+          // Action button
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24),
+            child: SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: _onNext,
+                child: Text(isLast ? 'Bắt đầu' : 'Tiếp theo'),
               ),
             ),
-            // Dots indicator
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: List.generate(
-                _pages.length,
-                (i) => AnimatedContainer(
-                  duration: const Duration(milliseconds: 250),
-                  margin: const EdgeInsets.symmetric(horizontal: 4),
-                  width: _currentPage == i ? 24 : 8,
-                  height: 8,
-                  decoration: BoxDecoration(
-                    color: _currentPage == i
-                        ? AppColors.primary
-                        : AppColors.primary.withOpacity(0.3),
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(height: 32),
-            // Action button
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24),
-              child: SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: _onNext,
-                  child: Text(isLast ? 'Bắt đầu' : 'Tiếp theo'),
-                ),
-              ),
-            ),
-            const SizedBox(height: 24),
-          ],
-        ),
+          ),
+          // Bottom padding: 24px + system navigation bar height
+          SizedBox(
+            height: 24 + MediaQuery.of(context).viewPadding.bottom,
+          ),
+        ],
       ),
     );
   }
