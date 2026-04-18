@@ -2,50 +2,98 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../core/theme/app_theme.dart';
-import '../blocs/history/history_cubit.dart';
 import '../../data/models/scan_record.dart';
+import '../blocs/history/history_cubit.dart';
 
-class MonthlyReportScreen extends StatelessWidget {
+class MonthlyReportScreen extends StatefulWidget {
   const MonthlyReportScreen({super.key});
+
+  @override
+  State<MonthlyReportScreen> createState() => _MonthlyReportScreenState();
+}
+
+class _MonthlyReportScreenState extends State<MonthlyReportScreen> {
+  int? _touchedSpotIndex;
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<HistoryCubit, HistoryState>(
       builder: (context, state) {
-        final spots = _buildMonthlySpots(state.allRecords);
+        final weekData = _buildWeekData(state.allRecords);
+        final hasData = weekData.any((w) => w.count > 0);
+
         return Scaffold(
           appBar: AppBar(title: const Text('Báo cáo tháng')),
           body: ListView(
             padding: const EdgeInsets.all(16),
             children: [
-              const Text(
-                'Điểm trung bình theo ngày trong tháng này',
-                style: TextStyle(fontSize: 14, color: Colors.grey),
+              Text(
+                'Điểm trung bình theo tuần (4 tuần gần nhất)',
+                style: TextStyle(fontSize: 14, color: Colors.grey[600]),
               ),
               const SizedBox(height: 20),
               SizedBox(
-                height: 220,
-                child: spots.isEmpty
+                height: 240,
+                child: !hasData
                     ? Center(
                         child: Text(
-                          'Chưa có dữ liệu tháng này',
+                          'Chưa có dữ liệu để hiển thị',
                           style: TextStyle(
                               color: Colors.grey[500], fontSize: 14),
                         ),
                       )
                     : LineChart(
                         LineChartData(
+                          lineTouchData: LineTouchData(
+                            touchTooltipData: LineTouchTooltipData(
+                              getTooltipColor: (_) => Colors.black87,
+                              getTooltipItems: (spots) {
+                                return spots.map((spot) {
+                                  final idx = spot.spotIndex;
+                                  final w = weekData[idx];
+                                  return LineTooltipItem(
+                                    '${w.label}\nĐiểm TB: ${w.avgScore}\n${w.count} lần quét',
+                                    const TextStyle(
+                                        color: Colors.white, fontSize: 12),
+                                  );
+                                }).toList();
+                              },
+                            ),
+                            touchCallback: (event, response) {
+                              setState(() {
+                                _touchedSpotIndex = response
+                                    ?.lineBarSpots?.first.spotIndex;
+                              });
+                            },
+                          ),
                           lineBarsData: [
                             LineChartBarData(
-                              spots: spots,
+                              spots: weekData.asMap().entries.map((e) {
+                                return FlSpot(
+                                  e.key.toDouble(),
+                                  e.value.avgScore.toDouble(),
+                                );
+                              }).toList(),
                               isCurved: true,
                               color: AppColors.primary,
-                              barWidth: 2.5,
+                              barWidth: 3,
                               belowBarData: BarAreaData(
                                 show: true,
-                                color: AppColors.primary.withOpacity(0.1),
+                                color: AppColors.primary.withOpacity(0.12),
                               ),
-                              dotData: const FlDotData(show: false),
+                              dotData: FlDotData(
+                                show: true,
+                                getDotPainter: (spot, percent, bar, index) {
+                                  final isTouched =
+                                      _touchedSpotIndex == index;
+                                  return FlDotCirclePainter(
+                                    radius: isTouched ? 7 : 5,
+                                    color: AppColors.primary,
+                                    strokeWidth: 2,
+                                    strokeColor: Colors.white,
+                                  );
+                                },
+                              ),
                             ),
                           ],
                           minY: 0,
@@ -54,11 +102,19 @@ class MonthlyReportScreen extends StatelessWidget {
                             bottomTitles: AxisTitles(
                               sideTitles: SideTitles(
                                 showTitles: true,
-                                interval: 7,
-                                getTitlesWidget: (v, meta) => Text(
-                                  'N${v.toInt()}',
-                                  style: const TextStyle(fontSize: 10),
-                                ),
+                                getTitlesWidget: (value, meta) {
+                                  final idx = value.toInt();
+                                  if (idx < 0 || idx >= weekData.length) {
+                                    return const SizedBox.shrink();
+                                  }
+                                  return Padding(
+                                    padding: const EdgeInsets.only(top: 4),
+                                    child: Text(
+                                      weekData[idx].shortLabel,
+                                      style: const TextStyle(fontSize: 11),
+                                    ),
+                                  );
+                                },
                               ),
                             ),
                             leftTitles: AxisTitles(
@@ -66,18 +122,21 @@ class MonthlyReportScreen extends StatelessWidget {
                                 showTitles: true,
                                 reservedSize: 32,
                                 interval: 25,
-                                getTitlesWidget: (v, meta) => Text(
-                                  v.toInt().toString(),
-                                  style: const TextStyle(fontSize: 10),
-                                ),
+                                getTitlesWidget: (v, meta) {
+                                  if (v == meta.max) {
+                                    return const SizedBox.shrink();
+                                  }
+                                  return Text(
+                                    v.toInt().toString(),
+                                    style: const TextStyle(fontSize: 10),
+                                  );
+                                },
                               ),
                             ),
                             topTitles: const AxisTitles(
-                                sideTitles:
-                                    SideTitles(showTitles: false)),
+                                sideTitles: SideTitles(showTitles: false)),
                             rightTitles: const AxisTitles(
-                                sideTitles:
-                                    SideTitles(showTitles: false)),
+                                sideTitles: SideTitles(showTitles: false)),
                           ),
                           gridData: const FlGridData(
                               show: true, drawVerticalLine: false),
@@ -86,7 +145,11 @@ class MonthlyReportScreen extends StatelessWidget {
                       ),
               ),
               const SizedBox(height: 24),
-              _MonthStats(records: state.allRecords),
+              const Text('4 tuần gần nhất',
+                  style: TextStyle(
+                      fontSize: 15, fontWeight: FontWeight.w700)),
+              const SizedBox(height: 10),
+              _WeekTable(weekData: weekData),
             ],
           ),
         );
@@ -94,96 +157,115 @@ class MonthlyReportScreen extends StatelessWidget {
     );
   }
 
-  List<FlSpot> _buildMonthlySpots(List<ScanRecord> records) {
+  /// Builds data for the last 4 weeks (week 0 = oldest, week 3 = current).
+  List<_WeekData> _buildWeekData(List<ScanRecord> records) {
     final now = DateTime.now();
-    // Group records by day of the current month, compute avg score per day
-    final Map<int, List<int>> dayScores = {};
-    for (final r in records) {
-      if (r.scannedAt.year == now.year && r.scannedAt.month == now.month) {
-        dayScores.putIfAbsent(r.scannedAt.day, () => []);
-        dayScores[r.scannedAt.day]!.add(r.analysis.overallScore);
-      }
-    }
-    if (dayScores.isEmpty) return [];
-    return dayScores.entries.map((e) {
-      final avg = e.value.reduce((a, b) => a + b) / e.value.length;
-      return FlSpot(e.key.toDouble(), avg);
-    }).toList()
-      ..sort((a, b) => a.x.compareTo(b.x));
+    return List.generate(4, (i) {
+      // week 0 = 3 weeks ago, week 3 = current week
+      final weeksAgo = 3 - i;
+      final weekStart = now.subtract(Duration(days: now.weekday - 1 + weeksAgo * 7));
+      final weekEnd = weekStart.add(const Duration(days: 6, hours: 23, minutes: 59, seconds: 59));
+
+      final weekRecords = records.where((r) {
+        return r.scannedAt.isAfter(weekStart.subtract(const Duration(seconds: 1))) &&
+            r.scannedAt.isBefore(weekEnd.add(const Duration(seconds: 1)));
+      }).toList();
+
+      final count = weekRecords.length;
+      final avgScore = count > 0
+          ? (weekRecords
+                      .map((r) => r.analysis.overallScore)
+                      .reduce((a, b) => a + b) /
+                  count)
+              .round()
+          : 0;
+
+      final label =
+          '${weekStart.day}/${weekStart.month} - ${weekEnd.day}/${weekEnd.month}';
+      final shortLabel = 'T${i + 1}';
+
+      return _WeekData(
+        label: label,
+        shortLabel: shortLabel,
+        count: count,
+        avgScore: avgScore,
+      );
+    });
   }
 }
 
-class _MonthStats extends StatelessWidget {
-  final List<ScanRecord> records;
-
-  const _MonthStats({required this.records});
-
-  @override
-  Widget build(BuildContext context) {
-    final now = DateTime.now();
-    final thisMonth = records
-        .where((r) =>
-            r.scannedAt.year == now.year &&
-            r.scannedAt.month == now.month)
-        .toList();
-    final total = thisMonth.length;
-    final avg = total > 0
-        ? (thisMonth
-                    .map((r) => r.analysis.overallScore)
-                    .reduce((a, b) => a + b) /
-                total)
-            .round()
-        : 0;
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text('Tháng này',
-            style:
-                TextStyle(fontSize: 15, fontWeight: FontWeight.w700)),
-        const SizedBox(height: 10),
-        Row(
-          children: [
-            _Chip(value: '$total', label: 'Lần quét'),
-            const SizedBox(width: 10),
-            _Chip(value: '$avg', label: 'Điểm TB'),
-          ],
-        ),
-      ],
-    );
-  }
-}
-
-class _Chip extends StatelessWidget {
-  final String value;
+class _WeekData {
   final String label;
+  final String shortLabel;
+  final int count;
+  final int avgScore;
 
-  const _Chip({required this.value, required this.label});
+  const _WeekData({
+    required this.label,
+    required this.shortLabel,
+    required this.count,
+    required this.avgScore,
+  });
+}
+
+class _WeekTable extends StatelessWidget {
+  final List<_WeekData> weekData;
+
+  const _WeekTable({required this.weekData});
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Container(
-        padding: const EdgeInsets.all(14),
-        decoration: BoxDecoration(
-          color: AppColors.primary.withOpacity(0.07),
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: AppColors.primary.withOpacity(0.2)),
-        ),
-        child: Column(
-          children: [
-            Text(value,
-                style: const TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.w700,
-                    color: AppColors.primary)),
-            const SizedBox(height: 4),
-            Text(label,
-                style:
-                    TextStyle(fontSize: 11, color: Colors.grey[600])),
-          ],
-        ),
-      ),
+    return Column(
+      children: weekData.asMap().entries.map((e) {
+        final w = e.value;
+        return Container(
+          margin: const EdgeInsets.only(bottom: 8),
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+          decoration: BoxDecoration(
+            color: AppColors.primary.withOpacity(0.05),
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(color: AppColors.primary.withOpacity(0.15)),
+          ),
+          child: Row(
+            children: [
+              Container(
+                width: 32,
+                height: 32,
+                decoration: BoxDecoration(
+                  color: AppColors.primary,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                alignment: Alignment.center,
+                child: Text(
+                  w.shortLabel,
+                  style: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w700,
+                      fontSize: 12),
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Text(w.label,
+                    style: const TextStyle(fontSize: 13)),
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Text('${w.count} lần quét',
+                      style: TextStyle(
+                          fontSize: 12, color: Colors.grey[600])),
+                  Text('Điểm TB: ${w.avgScore}',
+                      style: const TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.primary)),
+                ],
+              ),
+            ],
+          ),
+        );
+      }).toList(),
     );
   }
 }

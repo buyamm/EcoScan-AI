@@ -183,6 +183,12 @@ class DashboardScreen extends StatelessWidget {
               _EmptyStatsBanner(onScan: () => context.go('/scan')),
               const SizedBox(height: 20),
             ],
+            // Impact shortcut
+            _ImpactShortcut(
+              totalScans: totalScans,
+              onTap: () => context.push('/impact'),
+            ),
+            const SizedBox(height: 20),
             // Recent scans
             if (historyState.allRecords.isNotEmpty) ...[
               Row(
@@ -281,6 +287,61 @@ class _StatCard extends StatelessWidget {
     );
 
     return fullWidth ? card : Expanded(child: card);
+  }
+}
+
+class _ImpactShortcut extends StatelessWidget {
+  final int totalScans;
+  final VoidCallback onTap;
+
+  const _ImpactShortcut({required this.totalScans, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(14),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        decoration: BoxDecoration(
+          color: AppColors.primary.withOpacity(0.07),
+          borderRadius: BorderRadius.circular(14),
+          border: Border.all(color: AppColors.primary.withOpacity(0.2)),
+        ),
+        child: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: AppColors.primary.withOpacity(0.12),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: const Icon(Icons.bar_chart,
+                  color: AppColors.primary, size: 22),
+            ),
+            const SizedBox(width: 14),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text('Tác động cá nhân',
+                      style: TextStyle(
+                          fontSize: 14, fontWeight: FontWeight.w700)),
+                  Text(
+                    totalScans > 0
+                        ? 'Xem biểu đồ tuần, tháng & phân bổ'
+                        : 'Quét sản phẩm để xem thống kê',
+                    style:
+                        TextStyle(fontSize: 12, color: Colors.grey[600]),
+                  ),
+                ],
+              ),
+            ),
+            const Icon(Icons.chevron_right, color: AppColors.primary),
+          ],
+        ),
+      ),
+    );
   }
 }
 
