@@ -248,7 +248,7 @@ class _AlternativeProductsScreenState
               product: alt,
               isSuitable: _isSuitable(alt),
               onTap: () =>
-                  context.go('/product/alternatives/detail', extra: alt),
+                  context.push('/product/alternatives/detail', extra: alt),
             )),
         const SizedBox(height: 8),
         Padding(

@@ -157,7 +157,7 @@ class AIPersonalizedScreen extends StatelessWidget {
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: () => context.go('/product/alternatives', extra: {
+                    onPressed: () => context.push('/product/alternatives', extra: {
                       'product': product,
                       'analysis': analysis,
                     }),
@@ -168,7 +168,7 @@ class AIPersonalizedScreen extends StatelessWidget {
               SizedBox(
                 width: double.infinity,
                 child: OutlinedButton(
-                  onPressed: () => context.go('/product/detail', extra: {
+                  onPressed: () => context.push('/product/detail', extra: {
                     'product': product,
                     'analysis': analysis,
                   }),

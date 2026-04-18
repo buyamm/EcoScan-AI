@@ -63,6 +63,14 @@ class AIErrorScreen extends StatelessWidget {
                   child: const Text('Về trang chủ'),
                 ),
               ),
+              const SizedBox(height: 12),
+              SizedBox(
+                width: double.infinity,
+                child: TextButton(
+                  onPressed: () => context.pop(),
+                  child: const Text('Quay lại'),
+                ),
+              ),
             ],
           ),
         ),

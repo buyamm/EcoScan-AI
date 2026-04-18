@@ -13,59 +13,64 @@ class AILoadingScreen extends StatelessWidget {
     return BlocListener<AIBloc, AIState>(
       listener: (context, state) {
         if (state is AISuccess) {
-          final profile =
-              context.read<ProfileCubit>().state.profile;
+          final profile = context.read<ProfileCubit>().state.profile;
 
-          // Priority: allergen conflicts first, then lifestyle, then score
+          // Replace the loading screen in the stack with the result screen,
+          // so the user can back to the previous screen (e.g. ProductFoundScreen).
           if (state.allergenConflicts.isNotEmpty) {
-            context.go('/product/allergen', extra: {
+            context.pushReplacement('/product/allergen', extra: {
               'product': state.product,
               'analysis': state.analysis,
               'detectedAllergens': state.allergenConflicts,
             });
           } else if (state.lifestyleConflicts.isNotEmpty) {
-            context.go('/product/lifestyle', extra: {
+            context.pushReplacement('/product/lifestyle', extra: {
               'product': state.product,
               'analysis': state.analysis,
               'userProfile': profile,
             });
           } else {
-            context.go('/product/score', extra: {
+            context.pushReplacement('/product/score', extra: {
               'product': state.product,
               'analysis': state.analysis,
             });
           }
         } else if (state is AIError) {
-          context.go('/ai/error', extra: state.message);
+          context.pushReplacement('/ai/error', extra: state.message);
         }
       },
-      child: Scaffold(
-        body: Center(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const _PulsingBrainIcon(),
-              const SizedBox(height: 28),
-              const Text(
-                'Đang phân tích AI...',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                'AI đang đánh giá thành phần sản phẩm',
-                style: TextStyle(fontSize: 13, color: Colors.grey[500]),
-              ),
-              const SizedBox(height: 24),
-              const LinearProgressIndicator(
-                color: AppColors.primary,
-                backgroundColor: AppColors.backgroundLight,
-              ),
-              const SizedBox(height: 32),
-              TextButton(
-                onPressed: () => context.go('/scan'),
-                child: const Text('Hủy'),
-              ),
-            ],
+      child: PopScope(
+        // Prevent accidental app exit during AI analysis; user must tap "Hủy"
+        canPop: false,
+        onPopInvokedWithResult: (didPop, _) {},
+        child: Scaffold(
+          body: Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const _PulsingBrainIcon(),
+                const SizedBox(height: 28),
+                const Text(
+                  'Đang phân tích AI...',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  'AI đang đánh giá thành phần sản phẩm',
+                  style: TextStyle(fontSize: 13, color: Colors.grey[500]),
+                ),
+                const SizedBox(height: 24),
+                const LinearProgressIndicator(
+                  color: AppColors.primary,
+                  backgroundColor: AppColors.backgroundLight,
+                ),
+                const SizedBox(height: 32),
+                TextButton(
+                  onPressed: () => context.go('/scan'),
+                  child: const Text('Hủy'),
+                ),
+              ],
+            ),
           ),
         ),
       ),

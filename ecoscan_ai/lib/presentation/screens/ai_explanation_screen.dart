@@ -64,7 +64,7 @@ class AIExplanationScreen extends StatelessWidget {
             score: analysis.health.score,
             concerns: analysis.health.concerns,
             positives: analysis.health.positives,
-            onDetailTap: () => context.go('/product/health', extra: {
+            onDetailTap: () => context.push('/product/health', extra: {
               'product': product,
               'analysis': analysis,
             }),
@@ -77,7 +77,7 @@ class AIExplanationScreen extends StatelessWidget {
             score: analysis.environment.score,
             concerns: analysis.environment.concerns,
             positives: analysis.environment.positives,
-            onDetailTap: () => context.go('/product/environment', extra: {
+            onDetailTap: () => context.push('/product/environment', extra: {
               'product': product,
               'analysis': analysis,
             }),
@@ -86,7 +86,7 @@ class AIExplanationScreen extends StatelessWidget {
           // Ethics section
           _EthicsSection(
             ethics: analysis.ethics,
-            onDetailTap: () => context.go('/product/ethics', extra: {
+            onDetailTap: () => context.push('/product/ethics', extra: {
               'product': product,
               'analysis': analysis,
             }),
@@ -109,7 +109,7 @@ class AIExplanationScreen extends StatelessWidget {
                 title: Text(
                     '${analysis.ingredients.length} thành phần được phân tích'),
                 trailing: const Icon(Icons.chevron_right),
-                onTap: () => context.go('/product/ingredients', extra: {
+                onTap: () => context.push('/product/ingredients', extra: {
                   'product': product,
                   'analysis': analysis,
                 }),

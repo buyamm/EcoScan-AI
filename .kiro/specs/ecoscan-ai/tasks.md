@@ -345,21 +345,21 @@
   - Emit `OCRTextDetected` khi nhận dạng được text có độ dài > 20 ký tự
   - _Requirements: 16.2_
 
-- [ ] 19. Đảm bảo navigation và routing hoàn chỉnh
-- [ ] 19.1 Kiểm tra và fix tất cả navigation gaps
+- [x] 19. Đảm bảo navigation và routing hoàn chỉnh
+- [x] 19.1 Kiểm tra và fix tất cả navigation gaps
   - Đảm bảo mọi màn hình có AppBar với nút back hoặc close phù hợp
   - Fix `ScanLoadingScreen`: thêm `BlocListener<AIBloc>` để navigate sau khi AI phân tích xong
   - Fix `ProductFoundScreen`: nút "Xem chi tiết" navigate đến `/product/detail` với cả `product` và trigger AI analysis
   - Đảm bảo `ScoreBreakdownScreen` có nút navigate đến từng màn hình phân tích chi tiết (health/environment/ethics)
   - _Requirements: 10.1, 10.2, 10.3_
 
-- [ ] 19.2 Implement luồng AI loading → result hoàn chỉnh
+- [x] 19.2 Implement luồng AI loading → result hoàn chỉnh
   - Cập nhật `AILoadingScreen` với `BlocListener<AIBloc>`: `AISuccess` → kiểm tra conflicts → navigate đúng màn hình; `AIError` → navigate `/ai/error`
   - Cập nhật `AIErrorScreen` với nút "Thử lại" dispatch `RetryAnalysis` và nút "Quay lại"
   - Đảm bảo `ScoreBreakdownScreen` hiển thị nút navigate đến `/product/alternatives` khi score < 70
   - _Requirements: 4.4, 10.4_
 
-- [ ] 19.3 Liệt kê và document các flow chính
+- [x] 19.3 Liệt kê và document các flow chính
   - Tạo comment block trong `app_router.dart` mô tả 5 flow chính:
     1. Barcode flow: `/scan` → `/scan/loading` → `/product/found` → `/product/detail` → `/product/score` → `/product/alternatives`
     2. OCR flow: `/scan/ocr` → `/scan/ocr/result` → `/ai/loading` → `/product/score`

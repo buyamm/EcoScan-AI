@@ -116,8 +116,7 @@ class ProductFoundScreen extends StatelessWidget {
             SizedBox(
               width: double.infinity,
               child: ElevatedButton.icon(
-                onPressed: () =>
-                    context.go('/product/detail', extra: product),
+                onPressed: () => context.push('/product/detail', extra: product),
                 icon: const Icon(Icons.visibility),
                 label: const Text('Xem chi tiết'),
               ),
@@ -128,7 +127,7 @@ class ProductFoundScreen extends StatelessWidget {
               child: ElevatedButton.icon(
                 onPressed: () {
                   context.read<AIBloc>().add(AnalyzeProduct(product));
-                  context.go('/ai/loading');
+                  context.push('/ai/loading');
                 },
                 style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.secondary),

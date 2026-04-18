@@ -85,30 +85,55 @@ class AIBloc extends Bloc<AIEvent, AIState> {
   // ─── Conflict detection helpers ─────────────────────────────────────────
 
   /// Returns allergen names (from user profile) found in the AI ingredient list.
+  /// Only flags a conflict when the AI explicitly marks an ingredient as
+  /// [IngredientSafety.avoid] AND its name matches a user allergy, OR when
+  /// the ingredient name is a close match (whole-word) to the allergy term.
   List<String> _detectAllergenConflicts(
       AIAnalysisModel analysis, UserProfile profile) {
     if (profile.allAllergies.isEmpty) return const [];
 
     final userAllergies =
-        profile.allAllergies.map((a) => a.toLowerCase()).toList();
+        profile.allAllergies.map((a) => a.toLowerCase().trim()).toList();
 
     final conflicting = <String>{};
+
     for (final ingredient in analysis.ingredients) {
-      final name = ingredient.name.toLowerCase();
+      final name = ingredient.name.toLowerCase().trim();
+
       for (final allergy in userAllergies) {
-        if (name.contains(allergy) || allergy.contains(name)) {
-          conflicting.add(allergy);
+        // Only match when the ingredient name contains the allergy term as a
+        // whole word (not a substring of a longer word).
+        // e.g. "lactose" matches "lactose monohydrate" but NOT "lac" or "lactic acid"
+        final nameContainsAllergy = _containsWholeWord(name, allergy);
+        final allergyContainsName =
+            name.length >= 4 && _containsWholeWord(allergy, name);
+
+        if (nameContainsAllergy || allergyContainsName) {
+          // Only flag if AI also considers this ingredient problematic,
+          // or if the ingredient name is a direct/strong match.
+          if (ingredient.safety == IngredientSafety.avoid ||
+              ingredient.safety == IngredientSafety.caution ||
+              name == allergy ||
+              name.startsWith('$allergy ') ||
+              name.startsWith('${allergy}-')) {
+            conflicting.add(allergy);
+          }
         }
       }
     }
-    // Also check summary text for allergen mentions
-    final summaryLower = analysis.summary.toLowerCase();
-    for (final allergy in userAllergies) {
-      if (summaryLower.contains(allergy)) {
-        conflicting.add(allergy);
-      }
-    }
+
     return conflicting.toList();
+  }
+
+  /// Returns true if [text] contains [word] as a whole word (space/punctuation boundary).
+  bool _containsWholeWord(String text, String word) {
+    if (word.isEmpty) return false;
+    // Use a simple boundary check: word must be preceded/followed by
+    // start/end of string, space, comma, dash, or parenthesis.
+    final pattern = RegExp(
+      r'(^|[\s,\-\(\)])' + RegExp.escape(word) + r'($|[\s,\-\(\)])',
+    );
+    return pattern.hasMatch(text);
   }
 
   /// Returns lifestyle options that conflict with the analysis result.

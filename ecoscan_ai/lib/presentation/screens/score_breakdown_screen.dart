@@ -23,7 +23,7 @@ class ScoreBreakdownScreen extends StatelessWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.help_outline),
-            onPressed: () => context.go('/product/score/explain'),
+            onPressed: () => context.push('/product/score/explain'),
             tooltip: 'Cách tính điểm',
           ),
         ],
@@ -43,7 +43,7 @@ class ScoreBreakdownScreen extends StatelessWidget {
                 score: analysis.health.score,
                 label: 'Sức khỏe',
                 icon: Icons.favorite_outline,
-                onTap: () => context.go('/product/health', extra: {
+                onTap: () => context.push('/product/health', extra: {
                   'product': product,
                   'analysis': analysis,
                 }),
@@ -52,7 +52,7 @@ class ScoreBreakdownScreen extends StatelessWidget {
                 score: analysis.environment.score,
                 label: 'Môi trường',
                 icon: Icons.eco_outlined,
-                onTap: () => context.go('/product/environment', extra: {
+                onTap: () => context.push('/product/environment', extra: {
                   'product': product,
                   'analysis': analysis,
                 }),
@@ -61,7 +61,7 @@ class ScoreBreakdownScreen extends StatelessWidget {
                 score: analysis.ethics.score,
                 label: 'Đạo đức',
                 icon: Icons.balance_outlined,
-                onTap: () => context.go('/product/ethics', extra: {
+                onTap: () => context.push('/product/ethics', extra: {
                   'product': product,
                   'analysis': analysis,
                 }),
@@ -106,7 +106,7 @@ class ScoreBreakdownScreen extends StatelessWidget {
           SizedBox(
             width: double.infinity,
             child: ElevatedButton.icon(
-              onPressed: () => context.go('/product/ingredients', extra: {
+              onPressed: () => context.push('/product/ingredients', extra: {
                 'product': product,
                 'analysis': analysis,
               }),
@@ -118,7 +118,7 @@ class ScoreBreakdownScreen extends StatelessWidget {
           SizedBox(
             width: double.infinity,
             child: OutlinedButton.icon(
-              onPressed: () => context.go('/product/ai', extra: {
+              onPressed: () => context.push('/product/ai', extra: {
                 'product': product,
                 'analysis': analysis,
               }),
@@ -126,6 +126,25 @@ class ScoreBreakdownScreen extends StatelessWidget {
               label: const Text('Phân tích AI đầy đủ'),
             ),
           ),
+          // Show alternatives button when score is below 70
+          if (analysis.overallScore < 70 && product != null) ...[
+            const SizedBox(height: 8),
+            SizedBox(
+              width: double.infinity,
+              child: OutlinedButton.icon(
+                onPressed: () => context.push('/product/alternatives', extra: {
+                  'product': product,
+                  'analysis': analysis,
+                }),
+                icon: const Icon(Icons.swap_horiz),
+                label: const Text('Xem sản phẩm thay thế tốt hơn'),
+                style: OutlinedButton.styleFrom(
+                  foregroundColor: AppColors.warning,
+                  side: const BorderSide(color: AppColors.warning),
+                ),
+              ),
+            ),
+          ],
         ],
       ),
     );

@@ -147,7 +147,7 @@ class PersonalizedWarningScreen extends StatelessWidget {
               child: ElevatedButton.icon(
                 style:
                     ElevatedButton.styleFrom(backgroundColor: AppColors.danger),
-                onPressed: () => context.go('/product/alternatives', extra: {
+                onPressed: () => context.push('/product/alternatives', extra: {
                   'product': product,
                   'analysis': analysis,
                 }),
@@ -159,7 +159,7 @@ class PersonalizedWarningScreen extends StatelessWidget {
           SizedBox(
             width: double.infinity,
             child: OutlinedButton(
-              onPressed: () => context.go('/product/ai', extra: {
+              onPressed: () => context.push('/product/ai', extra: {
                 'product': product,
                 'analysis': analysis,
               }),
@@ -170,7 +170,7 @@ class PersonalizedWarningScreen extends StatelessWidget {
           SizedBox(
             width: double.infinity,
             child: TextButton(
-              onPressed: () => context.go('/product/detail', extra: {
+              onPressed: () => context.push('/product/detail', extra: {
                 'product': product,
                 'analysis': analysis,
               }),

@@ -123,7 +123,7 @@ class LifestyleConflictScreen extends StatelessWidget {
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
-              onPressed: () => context.go('/product/alternatives', extra: {
+              onPressed: () => context.push('/product/alternatives', extra: {
                 'product': product,
                 'analysis': analysis,
               }),

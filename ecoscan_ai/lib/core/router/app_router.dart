@@ -107,6 +107,42 @@ import '../../presentation/screens/worst_products_screen.dart';
 
 /// Central router definition for EcoScan AI.
 /// All 100 routes are defined here.
+///
+/// ─── Main Navigation Flows ───────────────────────────────────────────────────
+///
+/// 1. Barcode Flow:
+///    /scan → /scan/loading → /product/found → /product/detail
+///         → /product/score → /product/alternatives
+///    - User scans a barcode; ScanBloc fetches product from Open Food Facts.
+///    - ProductFoundScreen lets user view detail (triggers AI) or analyze directly.
+///    - AILoadingScreen listens to AIBloc and routes to allergen/lifestyle/score.
+///    - ScoreBreakdownScreen shows alternatives button when score < 70.
+///
+/// 2. OCR Flow:
+///    /scan/ocr → /scan/ocr/result → /scan/ocr/edit (optional)
+///             → /ai/loading → /product/score
+///    - User captures ingredient label; ML Kit extracts text.
+///    - OCRResultScreen lets user confirm or edit text before AI analysis.
+///    - AIBloc dispatches AnalyzeOCRText; AILoadingScreen handles routing.
+///
+/// 3. Manual Flow:
+///    /scan/manual → /scan/loading → /product/found → /product/detail
+///                → /product/score → /product/alternatives
+///    - User types a barcode manually; same flow as barcode after lookup.
+///
+/// 4. History Flow:
+///    /history → /history/detail → (view saved analysis without API calls)
+///    - ScanHistoryScreen lists all saved ScanRecords from Hive.
+///    - HistoryDetailScreen re-renders the full analysis from local data.
+///    - Supports search (/history/search) and filter (/history/filter).
+///
+/// 5. Profile Flow:
+///    /profile → /profile/allergies → /profile/lifestyle → /profile/dietary
+///    - UserProfileScreen shows summary chips (red=allergens, green=lifestyle, orange=dietary).
+///    - Each sub-screen saves changes to SharedPreferences immediately.
+///    - Profile data is injected into Groq prompts on next AI analysis.
+///
+/// ─────────────────────────────────────────────────────────────────────────────
 class AppRouter {
   AppRouter._();
 

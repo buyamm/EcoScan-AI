@@ -150,7 +150,7 @@ class ProductCompareScreen extends StatelessWidget {
             width: double.infinity,
             child: ElevatedButton.icon(
               onPressed: () =>
-                  context.go('/product/alternatives/detail', extra: productB),
+                  context.push('/product/alternatives/detail', extra: productB),
               icon: const Icon(Icons.check_circle_outline),
               label: Text(
                 productB.name.isNotEmpty

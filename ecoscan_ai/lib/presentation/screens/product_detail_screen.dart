@@ -31,7 +31,7 @@ class ProductDetailScreen extends StatelessWidget {
             TextButton(
               onPressed: () {
                 context.read<AIBloc>().add(AnalyzeProduct(product));
-                context.go('/ai/loading');
+                context.push('/ai/loading');
               },
               child: const Text(
                 'Phân tích AI',
@@ -45,7 +45,7 @@ class ProductDetailScreen extends StatelessWidget {
           // Product image
           if (product.imageUrl.isNotEmpty)
             GestureDetector(
-              onTap: () => context.go(
+              onTap: () => context.push(
                 '/product/image',
                 extra: product.imageUrl,
               ),
@@ -123,7 +123,7 @@ class ProductDetailScreen extends StatelessWidget {
                             fontWeight: FontWeight.w700, fontSize: 16),
                       ),
                       TextButton(
-                        onPressed: () => context.go(
+                        onPressed: () => context.push(
                           '/product/nutrition',
                           extra: product,
                         ),
@@ -146,7 +146,7 @@ class ProductDetailScreen extends StatelessWidget {
                       ),
                       if (analysis != null)
                         TextButton(
-                          onPressed: () => context.go(
+                          onPressed: () => context.push(
                             '/product/ingredients',
                             extra: {
                               'product': product,
@@ -173,7 +173,7 @@ class ProductDetailScreen extends StatelessWidget {
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton.icon(
-                      onPressed: () => context.go(
+                      onPressed: () => context.push(
                         '/product/score',
                         extra: {
                           'product': product,
@@ -189,10 +189,8 @@ class ProductDetailScreen extends StatelessWidget {
                     width: double.infinity,
                     child: ElevatedButton.icon(
                       onPressed: () {
-                        context
-                            .read<AIBloc>()
-                            .add(AnalyzeProduct(product));
-                        context.go('/ai/loading');
+                        context.read<AIBloc>().add(AnalyzeProduct(product));
+                        context.push('/ai/loading');
                       },
                       icon: const Icon(Icons.psychology),
                       label: const Text('Phân tích AI'),
