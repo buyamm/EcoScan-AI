@@ -6,6 +6,7 @@ import '../../../data/models/ai_analysis_model.dart';
 import '../../../data/models/product_model.dart';
 import '../../../data/models/scan_record.dart';
 import '../../../data/models/user_profile.dart';
+import '../../../data/repositories/ai_analysis_cache_repository.dart';
 import '../../../data/repositories/scan_history_repository.dart';
 import '../../../data/repositories/user_profile_repository.dart';
 import '../../../data/services/groq_service.dart';
@@ -17,6 +18,7 @@ class AIBloc extends Bloc<AIEvent, AIState> {
   final GroqService _groqService;
   final UserProfileRepository _profileRepo;
   final ScanHistoryRepository _historyRepo;
+  final AIAnalysisCacheRepository _analysisCache;
 
   /// Cached last event for retry support.
   AIEvent? _lastEvent;
@@ -25,9 +27,11 @@ class AIBloc extends Bloc<AIEvent, AIState> {
     required GroqService groqService,
     required UserProfileRepository profileRepo,
     required ScanHistoryRepository historyRepo,
+    required AIAnalysisCacheRepository analysisCache,
   })  : _groqService = groqService,
         _profileRepo = profileRepo,
         _historyRepo = historyRepo,
+        _analysisCache = analysisCache,
         super(AIInitial()) {
     on<AnalyzeProduct>(_onAnalyzeProduct);
     on<AnalyzeOCRText>(_onAnalyzeOCRText);
@@ -180,16 +184,33 @@ class AIBloc extends Bloc<AIEvent, AIState> {
     required UserProfile userProfile,
     required Emitter<AIState> emit,
     String scanMethod = 'barcode',
-  }) async {    try {
-      final rawAnalysis = await _groqService.analyzeProduct(
-        product,
-        userProfile: userProfile,
-      );
+  }) async {
+    try {
+      // Use barcode as cache key; skip cache for OCR (no stable barcode)
+      final cacheKey = product.barcode;
+      final cached = cacheKey.isNotEmpty ? _analysisCache.get(cacheKey) : null;
 
-      // Recalculate overall score using weighted formula (health 40%, env 40%, ethics 20%)
-      final analysis = EcoScoreCalculator.recalculate(rawAnalysis);
+      final AIAnalysisModel analysis;
+      final bool fromCache;
 
-      // Auto-save scan record
+      if (cached != null) {
+        // Cache hit — skip Groq call entirely
+        analysis = cached;
+        fromCache = true;
+      } else {
+        // Cache miss — call Groq and store result
+        final rawAnalysis = await _groqService.analyzeProduct(
+          product,
+          userProfile: userProfile,
+        );
+        analysis = EcoScoreCalculator.recalculate(rawAnalysis);
+        if (cacheKey.isNotEmpty) {
+          await _analysisCache.put(cacheKey, analysis);
+        }
+        fromCache = false;
+      }
+
+      // Auto-save scan record (always, even on cache hit — it's a new scan event)
       final previousTotal = _historyRepo.getAll().length;
       final record = ScanRecord(
         id: const Uuid().v4(),
@@ -220,6 +241,7 @@ class AIBloc extends Bloc<AIEvent, AIState> {
         newAchievements: newAchievements,
         allergenConflicts: allergenConflicts,
         lifestyleConflicts: lifestyleConflicts,
+        fromCache: fromCache,
       ));
     } on RateLimitException catch (e) {
       emit(AIError(

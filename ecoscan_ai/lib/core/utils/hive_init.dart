@@ -31,4 +31,5 @@ Future<void> initHive() async {
   // Open boxes
   await Hive.openBox<ScanRecord>(AppConstants.scanHistoryBox);
   await Hive.openBox<String>(AppConstants.cachedProductsBox);
+  await Hive.openBox<String>(AppConstants.aiAnalysisCacheBox);
 }

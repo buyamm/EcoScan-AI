@@ -303,6 +303,7 @@ class AppRouter {
             return ScoreBreakdownScreen(
               product: e['product'] as ProductModel?,
               analysis: e['analysis'] as AIAnalysisModel,
+              fromCache: e['fromCache'] as bool? ?? false,
             );
           },
         ),

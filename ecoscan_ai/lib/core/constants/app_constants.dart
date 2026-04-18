@@ -15,6 +15,7 @@ class AppConstants {
   // Hive box names
   static const String scanHistoryBox = 'scan_history';
   static const String cachedProductsBox = 'cached_products';
+  static const String aiAnalysisCacheBox = 'ai_analysis_cache';
 
   // SharedPreferences keys
   static const String keyUserProfile = 'user_profile';
@@ -27,6 +28,7 @@ class AppConstants {
   // Limits
   static const int maxScanHistory = 500;
   static const int productCacheDays = 7;
+  static const int aiAnalysisCacheDays = 30;
 
   // Auth
   static const String keyGoogleUser = 'google_user';

@@ -6,6 +6,7 @@ import 'l10n/app_localizations.dart';
 import 'core/theme/app_theme.dart';
 import 'core/utils/hive_init.dart';
 import 'core/router/app_router.dart';
+import 'data/repositories/ai_analysis_cache_repository.dart';
 import 'data/repositories/auth_repository.dart';
 import 'data/repositories/settings_repository.dart';
 import 'data/repositories/user_profile_repository.dart';
@@ -30,6 +31,7 @@ void main() async {
   final userProfileRepo = UserProfileRepository(prefs);
   final scanHistoryRepo = ScanHistoryRepository();
   final productCacheRepo = ProductCacheRepository();
+  final aiAnalysisCacheRepo = AIAnalysisCacheRepository();
   final authRepo = AuthRepository(prefs: prefs, profileRepo: userProfileRepo);
 
   runApp(EcoScanApp(
@@ -37,6 +39,7 @@ void main() async {
     userProfileRepo: userProfileRepo,
     scanHistoryRepo: scanHistoryRepo,
     productCacheRepo: productCacheRepo,
+    aiAnalysisCacheRepo: aiAnalysisCacheRepo,
     authRepo: authRepo,
   ));
 }
@@ -46,6 +49,7 @@ class EcoScanApp extends StatelessWidget {
   final UserProfileRepository userProfileRepo;
   final ScanHistoryRepository scanHistoryRepo;
   final ProductCacheRepository productCacheRepo;
+  final AIAnalysisCacheRepository aiAnalysisCacheRepo;
   final AuthRepository authRepo;
 
   const EcoScanApp({
@@ -54,6 +58,7 @@ class EcoScanApp extends StatelessWidget {
     required this.userProfileRepo,
     required this.scanHistoryRepo,
     required this.productCacheRepo,
+    required this.aiAnalysisCacheRepo,
     required this.authRepo,
   });
 
@@ -84,6 +89,7 @@ class EcoScanApp extends StatelessWidget {
             groqService: GroqService(),
             profileRepo: userProfileRepo,
             historyRepo: scanHistoryRepo,
+            analysisCache: aiAnalysisCacheRepo,
           ),
         ),
         BlocProvider(

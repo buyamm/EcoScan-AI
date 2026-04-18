@@ -33,6 +33,7 @@ class AILoadingScreen extends StatelessWidget {
             context.pushReplacement('/product/score', extra: {
               'product': state.product,
               'analysis': state.analysis,
+              'fromCache': state.fromCache,
             });
           }
         } else if (state is AIError) {

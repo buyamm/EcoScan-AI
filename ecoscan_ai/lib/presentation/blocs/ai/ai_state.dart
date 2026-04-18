@@ -24,6 +24,9 @@ class AISuccess extends AIState {
   /// Lifestyle options from the user profile that conflict with this product.
   final List<LifestyleOption> lifestyleConflicts;
 
+  /// Whether this result was served from local cache (no Groq call made).
+  final bool fromCache;
+
   AISuccess(
     this.analysis, {
     this.product,
@@ -31,6 +34,7 @@ class AISuccess extends AIState {
     this.newAchievements = const [],
     this.allergenConflicts = const [],
     this.lifestyleConflicts = const [],
+    this.fromCache = false,
   });
 }
 

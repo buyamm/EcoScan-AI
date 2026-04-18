@@ -8,11 +8,13 @@ import '../widgets/widgets.dart';
 class ScoreBreakdownScreen extends StatelessWidget {
   final ProductModel? product;
   final AIAnalysisModel analysis;
+  final bool fromCache;
 
   const ScoreBreakdownScreen({
     super.key,
     this.product,
     required this.analysis,
+    this.fromCache = false,
   });
 
   @override
@@ -21,6 +23,17 @@ class ScoreBreakdownScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Phân tích điểm số'),
         actions: [
+          if (fromCache)
+            Padding(
+              padding: const EdgeInsets.only(right: 4),
+              child: Chip(
+                label: const Text('Từ cache',
+                    style: TextStyle(fontSize: 11, color: Colors.white)),
+                backgroundColor: AppColors.primary.withOpacity(0.7),
+                padding: EdgeInsets.zero,
+                visualDensity: VisualDensity.compact,
+              ),
+            ),
           IconButton(
             icon: const Icon(Icons.help_outline),
             onPressed: () => context.push('/product/score/explain'),
