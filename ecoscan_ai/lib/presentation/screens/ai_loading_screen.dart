@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import '../blocs/ai/ai_bloc.dart';
+import '../blocs/profile/profile_cubit.dart';
 import '../../core/theme/app_theme.dart';
 
 class AILoadingScreen extends StatelessWidget {
@@ -12,10 +13,28 @@ class AILoadingScreen extends StatelessWidget {
     return BlocListener<AIBloc, AIState>(
       listener: (context, state) {
         if (state is AISuccess) {
-          context.go('/product/score', extra: {
-            'product': state.product,
-            'analysis': state.analysis,
-          });
+          final profile =
+              context.read<ProfileCubit>().state.profile;
+
+          // Priority: allergen conflicts first, then lifestyle, then score
+          if (state.allergenConflicts.isNotEmpty) {
+            context.go('/product/allergen', extra: {
+              'product': state.product,
+              'analysis': state.analysis,
+              'detectedAllergens': state.allergenConflicts,
+            });
+          } else if (state.lifestyleConflicts.isNotEmpty) {
+            context.go('/product/lifestyle', extra: {
+              'product': state.product,
+              'analysis': state.analysis,
+              'userProfile': profile,
+            });
+          } else {
+            context.go('/product/score', extra: {
+              'product': state.product,
+              'analysis': state.analysis,
+            });
+          }
         } else if (state is AIError) {
           context.go('/ai/error', extra: state.message);
         }

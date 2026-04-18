@@ -91,6 +91,16 @@ class LifestyleConflictScreen extends StatelessWidget {
             const SizedBox(height: 16),
           ],
 
+          // Conflicting ingredients from AI analysis
+          if (analysis.ingredients.any(
+              (i) => i.safety == IngredientSafety.avoid)) ...[
+            const SectionHeader(title: 'Thành phần xung đột'),
+            ...analysis.ingredients
+                .where((i) => i.safety == IngredientSafety.avoid)
+                .map((i) => IngredientCard(ingredient: i)),
+            const SizedBox(height: 16),
+          ],
+
           // Not suitable for
           if (analysis.notSuitableFor.isNotEmpty) ...[
             const SectionHeader(title: 'Sản phẩm không phù hợp với'),

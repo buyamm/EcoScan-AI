@@ -110,12 +110,17 @@ class AllergenWarningScreen extends StatelessWidget {
           ),
           const SizedBox(height: 16),
 
-          // Flagged ingredients from AI
+          // Flagged ingredients from AI that match allergens
           if (analysis.ingredients.any(
-              (i) => i.safety == IngredientSafety.avoid)) ...[
-            const SectionHeader(title: 'Thành phần cần tránh'),
+              (i) => i.safety == IngredientSafety.avoid ||
+                  detectedAllergens.any((a) =>
+                      i.name.toLowerCase().contains(a.toLowerCase())))) ...[
+            const SectionHeader(title: 'Thành phần liên quan'),
             ...analysis.ingredients
-                .where((i) => i.safety == IngredientSafety.avoid)
+                .where((i) =>
+                    i.safety == IngredientSafety.avoid ||
+                    detectedAllergens.any((a) =>
+                        i.name.toLowerCase().contains(a.toLowerCase())))
                 .map((i) => IngredientCard(ingredient: i)),
             const SizedBox(height: 16),
           ],

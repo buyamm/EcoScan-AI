@@ -82,13 +82,80 @@ class AIBloc extends Bloc<AIEvent, AIState> {
     }
   }
 
+  // ─── Conflict detection helpers ─────────────────────────────────────────
+
+  /// Returns allergen names (from user profile) found in the AI ingredient list.
+  List<String> _detectAllergenConflicts(
+      AIAnalysisModel analysis, UserProfile profile) {
+    if (profile.allAllergies.isEmpty) return const [];
+
+    final userAllergies =
+        profile.allAllergies.map((a) => a.toLowerCase()).toList();
+
+    final conflicting = <String>{};
+    for (final ingredient in analysis.ingredients) {
+      final name = ingredient.name.toLowerCase();
+      for (final allergy in userAllergies) {
+        if (name.contains(allergy) || allergy.contains(name)) {
+          conflicting.add(allergy);
+        }
+      }
+    }
+    // Also check summary text for allergen mentions
+    final summaryLower = analysis.summary.toLowerCase();
+    for (final allergy in userAllergies) {
+      if (summaryLower.contains(allergy)) {
+        conflicting.add(allergy);
+      }
+    }
+    return conflicting.toList();
+  }
+
+  /// Returns lifestyle options that conflict with the analysis result.
+  List<LifestyleOption> _detectLifestyleConflicts(
+      AIAnalysisModel analysis, UserProfile profile) {
+    if (profile.lifestyle.isEmpty) return const [];
+
+    final conflicts = <LifestyleOption>[];
+    final notSuitableLower =
+        analysis.notSuitableFor.map((s) => s.toLowerCase()).toList();
+
+    for (final option in profile.lifestyle) {
+      switch (option) {
+        case LifestyleOption.vegan:
+          if (analysis.ethics.vegan == false ||
+              notSuitableLower.any((s) =>
+                  s.contains('vegan') || s.contains('thuần chay'))) {
+            conflicts.add(option);
+          }
+          break;
+        case LifestyleOption.vegetarian:
+          if (notSuitableLower.any((s) =>
+              s.contains('vegetarian') || s.contains('ăn chay'))) {
+            conflicts.add(option);
+          }
+          break;
+        case LifestyleOption.crueltyFreeOnly:
+          if (analysis.ethics.crueltyFree == false) {
+            conflicts.add(option);
+          }
+          break;
+        case LifestyleOption.ecoConscious:
+          if (analysis.environment.score < 40) {
+            conflicts.add(option);
+          }
+          break;
+      }
+    }
+    return conflicts;
+  }
+
   Future<void> _runAnalysis({
     required ProductModel product,
     required UserProfile userProfile,
     required Emitter<AIState> emit,
     String scanMethod = 'barcode',
-  }) async {
-    try {
+  }) async {    try {
       final rawAnalysis = await _groqService.analyzeProduct(
         product,
         userProfile: userProfile,
@@ -115,11 +182,19 @@ class AIBloc extends Bloc<AIEvent, AIState> {
         previousTotal: previousTotal,
       );
 
+      // Detect allergen conflicts: compare ingredient names against user allergies
+      final allergenConflicts = _detectAllergenConflicts(analysis, userProfile);
+
+      // Detect lifestyle conflicts using ethics + suitableFor/notSuitableFor
+      final lifestyleConflicts = _detectLifestyleConflicts(analysis, userProfile);
+
       emit(AISuccess(
         analysis,
         product: product,
         scanRecordId: record.id,
         newAchievements: newAchievements,
+        allergenConflicts: allergenConflicts,
+        lifestyleConflicts: lifestyleConflicts,
       ));
     } on RateLimitException catch (e) {
       emit(AIError(

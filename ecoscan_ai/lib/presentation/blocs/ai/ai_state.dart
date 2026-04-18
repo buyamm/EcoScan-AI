@@ -18,11 +18,19 @@ class AISuccess extends AIState {
   /// Milestones newly unlocked by this scan.
   final List<AchievementMilestone> newAchievements;
 
+  /// Allergen names from the user profile that conflict with this product.
+  final List<String> allergenConflicts;
+
+  /// Lifestyle options from the user profile that conflict with this product.
+  final List<LifestyleOption> lifestyleConflicts;
+
   AISuccess(
     this.analysis, {
     this.product,
     this.scanRecordId,
     this.newAchievements = const [],
+    this.allergenConflicts = const [],
+    this.lifestyleConflicts = const [],
   });
 }
 

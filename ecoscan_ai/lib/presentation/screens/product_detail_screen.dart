@@ -3,9 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import '../blocs/ai/ai_bloc.dart';
+import '../blocs/profile/profile_cubit.dart';
 import '../../data/models/product_model.dart';
 import '../../data/models/ai_analysis_model.dart';
+import '../../data/models/user_profile.dart';
 import '../widgets/eco_score_chip.dart';
+import '../widgets/ingredient_card.dart';
 import '../../core/theme/app_theme.dart';
 
 class ProductDetailScreen extends StatelessWidget {
@@ -196,6 +199,12 @@ class ProductDetailScreen extends StatelessWidget {
                     ),
                   ),
                 ],
+                const SizedBox(height: 16),
+                // Personalized section
+                _PersonalizedSection(
+                  product: product,
+                  analysis: analysis,
+                ),
               ],
             ),
           ),
@@ -297,6 +306,134 @@ class _NutriBadge extends StatelessWidget {
                 style: TextStyle(fontSize: 11, color: Colors.grey[600])),
           ],
         ),
+      ),
+    );
+  }
+}
+
+/// Shows a "Phù hợp với bạn" section based on the user's profile.
+/// - If no profile is set up, shows a banner prompting setup.
+/// - If analysis is available, lists safe (green) and flagged (red) ingredients.
+class _PersonalizedSection extends StatelessWidget {
+  final ProductModel product;
+  final AIAnalysisModel? analysis;
+
+  const _PersonalizedSection({required this.product, this.analysis});
+
+  @override
+  Widget build(BuildContext context) {
+    final profile = context.watch<ProfileCubit>().state.profile;
+    final hasProfile = profile.allAllergies.isNotEmpty ||
+        profile.lifestyle.isNotEmpty ||
+        profile.dietaryPreferences.isNotEmpty;
+
+    // No profile set up yet
+    if (!hasProfile) {
+      return Container(
+        margin: const EdgeInsets.only(top: 4),
+        padding: const EdgeInsets.all(14),
+        decoration: BoxDecoration(
+          color: AppColors.primary.withOpacity(0.06),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: AppColors.primary.withOpacity(0.2)),
+        ),
+        child: Row(
+          children: [
+            const Icon(Icons.person_outline,
+                color: AppColors.primary, size: 22),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Text(
+                'Thiết lập hồ sơ để nhận cảnh báo cá nhân hóa phù hợp với bạn.',
+                style: TextStyle(fontSize: 13, color: Colors.grey[700]),
+              ),
+            ),
+            TextButton(
+              onPressed: () => context.go('/profile/setup'),
+              child: const Text('Thiết lập'),
+            ),
+          ],
+        ),
+      );
+    }
+
+    // No analysis yet
+    if (analysis == null) return const SizedBox.shrink();
+
+    final safeIngredients = analysis!.ingredients
+        .where((i) => i.safety == IngredientSafety.safe)
+        .toList();
+    final flaggedIngredients = analysis!.ingredients
+        .where((i) =>
+            i.safety == IngredientSafety.avoid ||
+            i.safety == IngredientSafety.caution)
+        .where((i) => profile.allAllergies.any(
+            (a) => i.name.toLowerCase().contains(a.toLowerCase())))
+        .toList();
+
+    if (safeIngredients.isEmpty && flaggedIngredients.isEmpty) {
+      return const SizedBox.shrink();
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Divider(),
+        const Padding(
+          padding: EdgeInsets.symmetric(vertical: 8),
+          child: Text(
+            'Phù hợp với bạn',
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+          ),
+        ),
+        if (flaggedIngredients.isNotEmpty) ...[
+          _SectionLabel(
+              label: 'Cần chú ý', color: AppColors.danger, icon: Icons.warning_outlined),
+          ...flaggedIngredients.map((i) => IngredientCard(ingredient: i)),
+          const SizedBox(height: 8),
+        ],
+        if (safeIngredients.isNotEmpty) ...[
+          _SectionLabel(
+              label: 'An toàn với bạn',
+              color: AppColors.primary,
+              icon: Icons.check_circle_outline),
+          ...safeIngredients.take(3).map((i) => IngredientCard(ingredient: i)),
+          if (safeIngredients.length > 3)
+            Padding(
+              padding: const EdgeInsets.only(top: 4),
+              child: Text(
+                '+ ${safeIngredients.length - 3} thành phần an toàn khác',
+                style: TextStyle(fontSize: 12, color: Colors.grey[500]),
+              ),
+            ),
+        ],
+      ],
+    );
+  }
+}
+
+class _SectionLabel extends StatelessWidget {
+  final String label;
+  final Color color;
+  final IconData icon;
+
+  const _SectionLabel(
+      {required this.label, required this.color, required this.icon});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 6),
+      child: Row(
+        children: [
+          Icon(icon, color: color, size: 16),
+          const SizedBox(width: 6),
+          Text(label,
+              style: TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
+                  color: color)),
+        ],
       ),
     );
   }

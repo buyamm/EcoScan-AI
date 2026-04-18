@@ -138,6 +138,26 @@ class GroqService {
       }).join(', ');
       sb.writeln('Lối sống của người dùng: $lifestyleLabels.');
     }
+    if (profile != null && profile.dietaryPreferences.isNotEmpty) {
+      final dietLabels = profile.dietaryPreferences.map((d) {
+        switch (d) {
+          case DietaryPreference.glutenFree:
+            return 'không gluten';
+          case DietaryPreference.lactoseFree:
+            return 'không lactose';
+          case DietaryPreference.lowSugar:
+            return 'ít đường';
+          case DietaryPreference.lowSalt:
+            return 'ít muối';
+          case DietaryPreference.keto:
+            return 'keto';
+          case DietaryPreference.paleo:
+            return 'paleo';
+        }
+      }).join(', ');
+      sb.writeln('Chế độ ăn của người dùng: $dietLabels. '
+          'Hãy cảnh báo nếu sản phẩm không phù hợp với chế độ ăn này.');
+    }
 
     sb.writeln('');
     sb.writeln('Trả về JSON với cấu trúc sau (không thêm markdown):');
