@@ -21,13 +21,16 @@ class UserProfileAdapter extends TypeAdapter<UserProfile> {
       allergies: (fields[1] as List).cast<String>(),
       lifestyle: (fields[2] as List).cast<LifestyleOption>(),
       customAllergies: (fields[3] as List).cast<String>(),
+      dietaryPreferences: fields[4] == null
+          ? []
+          : (fields[4] as List).cast<DietaryPreference>(),
     );
   }
 
   @override
   void write(BinaryWriter writer, UserProfile obj) {
     writer
-      ..writeByte(4)
+      ..writeByte(5)
       ..writeByte(0)
       ..write(obj.displayName)
       ..writeByte(1)
@@ -35,7 +38,9 @@ class UserProfileAdapter extends TypeAdapter<UserProfile> {
       ..writeByte(2)
       ..write(obj.lifestyle)
       ..writeByte(3)
-      ..write(obj.customAllergies);
+      ..write(obj.customAllergies)
+      ..writeByte(4)
+      ..write(obj.dietaryPreferences);
   }
 
   @override
@@ -94,6 +99,65 @@ class LifestyleOptionAdapter extends TypeAdapter<LifestyleOption> {
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is LifestyleOptionAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class DietaryPreferenceAdapter extends TypeAdapter<DietaryPreference> {
+  @override
+  final int typeId = 15;
+
+  @override
+  DietaryPreference read(BinaryReader reader) {
+    switch (reader.readByte()) {
+      case 0:
+        return DietaryPreference.glutenFree;
+      case 1:
+        return DietaryPreference.lactoseFree;
+      case 2:
+        return DietaryPreference.lowSugar;
+      case 3:
+        return DietaryPreference.lowSalt;
+      case 4:
+        return DietaryPreference.keto;
+      case 5:
+        return DietaryPreference.paleo;
+      default:
+        return DietaryPreference.glutenFree;
+    }
+  }
+
+  @override
+  void write(BinaryWriter writer, DietaryPreference obj) {
+    switch (obj) {
+      case DietaryPreference.glutenFree:
+        writer.writeByte(0);
+        break;
+      case DietaryPreference.lactoseFree:
+        writer.writeByte(1);
+        break;
+      case DietaryPreference.lowSugar:
+        writer.writeByte(2);
+        break;
+      case DietaryPreference.lowSalt:
+        writer.writeByte(3);
+        break;
+      case DietaryPreference.keto:
+        writer.writeByte(4);
+        break;
+      case DietaryPreference.paleo:
+        writer.writeByte(5);
+        break;
+    }
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is DietaryPreferenceAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

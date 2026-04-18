@@ -67,6 +67,24 @@ class ProfileCubit extends Cubit<ProfileState> {
     await saveProfile(state.profile.copyWith(displayName: name.trim()));
   }
 
+  /// Toggle a dietary preference on/off.
+  Future<void> toggleDietaryPreference(DietaryPreference pref) async {
+    final current = state.profile.dietaryPreferences.toList();
+    if (current.contains(pref)) {
+      current.remove(pref);
+    } else {
+      current.add(pref);
+    }
+    await saveProfile(state.profile.copyWith(dietaryPreferences: current));
+  }
+
+  /// Replace the full list of dietary preferences.
+  Future<void> updateDietaryPreferences(
+      List<DietaryPreference> preferences) async {
+    await saveProfile(
+        state.profile.copyWith(dietaryPreferences: preferences));
+  }
+
   /// Returns true if the product's allergens conflict with user profile.
   bool hasAllergenConflict(List<String> productAllergens) {
     final userAllergies = state.profile.allAllergies

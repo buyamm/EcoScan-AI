@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import '../blocs/auth/auth_cubit.dart';
+import '../blocs/profile/profile_cubit.dart';
 import '../blocs/settings/settings_cubit.dart';
 import '../../core/theme/app_theme.dart';
 
@@ -47,6 +48,8 @@ class _SplashScreenState extends State<SplashScreen>
     // Check if user has seen login screen before
     final authState = context.read<AuthCubit>().state;
     if (authState.isAuthenticated || authState.isGuest) {
+      // Ensure ProfileCubit has the latest persisted data
+      context.read<ProfileCubit>().loadProfile();
       context.go('/home');
     } else {
       context.go('/login');

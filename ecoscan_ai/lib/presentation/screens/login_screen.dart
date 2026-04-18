@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import '../blocs/auth/auth_cubit.dart';
+import '../blocs/profile/profile_cubit.dart';
 import '../../core/theme/app_theme.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -12,6 +13,9 @@ class LoginScreen extends StatelessWidget {
     return BlocListener<AuthCubit, AuthState>(
       listener: (context, state) {
         if (state.isAuthenticated) {
+          // Reload profile so ProfileCubit picks up the Google user data
+          // that AuthRepository just merged into SharedPreferences.
+          context.read<ProfileCubit>().loadProfile();
           if (state.isFirstLogin) {
             context.go('/profile/setup');
           } else {

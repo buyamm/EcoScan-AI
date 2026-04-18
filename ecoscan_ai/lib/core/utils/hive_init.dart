@@ -25,6 +25,7 @@ Future<void> initHive() async {
   Hive.registerAdapter(AIAnalysisModelAdapter());
   Hive.registerAdapter(ScanRecordAdapter());
   Hive.registerAdapter(LifestyleOptionAdapter());
+  Hive.registerAdapter(DietaryPreferenceAdapter());
   Hive.registerAdapter(UserProfileAdapter());
 
   // Open boxes

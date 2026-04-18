@@ -14,6 +14,22 @@ enum LifestyleOption {
   crueltyFreeOnly,
 }
 
+@HiveType(typeId: 15)
+enum DietaryPreference {
+  @HiveField(0)
+  glutenFree,
+  @HiveField(1)
+  lactoseFree,
+  @HiveField(2)
+  lowSugar,
+  @HiveField(3)
+  lowSalt,
+  @HiveField(4)
+  keto,
+  @HiveField(5)
+  paleo,
+}
+
 @HiveType(typeId: 14)
 class UserProfile extends HiveObject {
   @HiveField(0)
@@ -28,8 +44,10 @@ class UserProfile extends HiveObject {
   @HiveField(3)
   final List<String> customAllergies;
 
-  // HiveField 4 & 5 reserved for future Hive persistence;
-  // currently stored only in JSON via SharedPreferences.
+  @HiveField(4)
+  final List<DietaryPreference> dietaryPreferences;
+
+  // Stored only in JSON via SharedPreferences (not in Hive box).
   final String? email;
   final String? photoUrl;
 
@@ -38,6 +56,7 @@ class UserProfile extends HiveObject {
     this.allergies = const [],
     this.lifestyle = const [],
     this.customAllergies = const [],
+    this.dietaryPreferences = const [],
     this.email,
     this.photoUrl,
   });
@@ -51,6 +70,7 @@ class UserProfile extends HiveObject {
     List<String>? allergies,
     List<LifestyleOption>? lifestyle,
     List<String>? customAllergies,
+    List<DietaryPreference>? dietaryPreferences,
     String? email,
     String? photoUrl,
   }) =>
@@ -59,6 +79,7 @@ class UserProfile extends HiveObject {
         allergies: allergies ?? this.allergies,
         lifestyle: lifestyle ?? this.lifestyle,
         customAllergies: customAllergies ?? this.customAllergies,
+        dietaryPreferences: dietaryPreferences ?? this.dietaryPreferences,
         email: email ?? this.email,
         photoUrl: photoUrl ?? this.photoUrl,
       );
@@ -68,6 +89,7 @@ class UserProfile extends HiveObject {
         'allergies': allergies,
         'lifestyle': lifestyle.map((e) => e.name).toList(),
         'customAllergies': customAllergies,
+        'dietaryPreferences': dietaryPreferences.map((e) => e.name).toList(),
         'email': email,
         'photoUrl': photoUrl,
       };
@@ -82,6 +104,12 @@ class UserProfile extends HiveObject {
                 ))
             .toList(),
         customAllergies: List<String>.from(json['customAllergies'] ?? []),
+        dietaryPreferences: (json['dietaryPreferences'] as List? ?? [])
+            .map((e) => DietaryPreference.values.firstWhere(
+                  (v) => v.name == e.toString(),
+                  orElse: () => DietaryPreference.glutenFree,
+                ))
+            .toList(),
         email: json['email']?.toString(),
         photoUrl: json['photoUrl']?.toString(),
       );

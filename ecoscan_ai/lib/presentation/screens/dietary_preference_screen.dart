@@ -13,7 +13,7 @@ class DietaryPreferenceScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {
-        final profile = state.profile;
+        final selected = state.profile.dietaryPreferences;
         return Scaffold(
           appBar: AppBar(title: const Text('Chế độ ăn')),
           body: ListView(
@@ -24,7 +24,7 @@ class DietaryPreferenceScreen extends StatelessWidget {
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
                   gradient: const LinearGradient(
-                    colors: [AppColors.primary, AppColors.secondary],
+                    colors: [Color(0xFFE65100), Color(0xFFFF8F00)],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
@@ -36,7 +36,7 @@ class DietaryPreferenceScreen extends StatelessWidget {
                     Text('🥗', style: TextStyle(fontSize: 36)),
                     SizedBox(height: 8),
                     Text(
-                      'Chế độ ăn',
+                      'Chế độ ăn uống',
                       style: TextStyle(
                           color: Colors.white,
                           fontSize: 20,
@@ -44,7 +44,7 @@ class DietaryPreferenceScreen extends StatelessWidget {
                     ),
                     SizedBox(height: 4),
                     Text(
-                      'Cài đặt sở thích ăn uống để nhận phân tích phù hợp',
+                      'Chọn chế độ ăn để nhận phân tích phù hợp với bạn',
                       style: TextStyle(color: Colors.white70, fontSize: 13),
                     ),
                   ],
@@ -52,27 +52,21 @@ class DietaryPreferenceScreen extends StatelessWidget {
               ),
               const SizedBox(height: 20),
 
-              const SectionHeader(title: 'Lựa chọn chế độ ăn'),
-              const SizedBox(height: 10),
+              const SectionHeader(title: 'Chọn chế độ ăn của bạn'),
+              const SizedBox(height: 12),
 
-              _DietaryOption(
-                emoji: '🥗',
-                title: 'Ăn chay (Vegetarian)',
-                subtitle: 'Không thịt, cá. Vẫn dùng sữa, trứng.',
-                isSelected: profile.lifestyle.contains(LifestyleOption.vegetarian),
-                onTap: () => context.read<ProfileCubit>().toggleLifestyle(LifestyleOption.vegetarian),
-                onDetailTap: () => context.go('/profile/lifestyle/detail', extra: LifestyleOption.vegetarian),
-              ),
-              _DietaryOption(
-                emoji: '🌿',
-                title: 'Thuần chay (Vegan)',
-                subtitle: 'Không dùng bất kỳ sản phẩm từ động vật.',
-                isSelected: profile.lifestyle.contains(LifestyleOption.vegan),
-                onTap: () => context.read<ProfileCubit>().toggleLifestyle(LifestyleOption.vegan),
-                onDetailTap: () => context.go('/profile/lifestyle/detail', extra: LifestyleOption.vegan),
-              ),
+              ...DietaryPreference.values.map((pref) {
+                final isSelected = selected.contains(pref);
+                return _DietaryCard(
+                  pref: pref,
+                  isSelected: isSelected,
+                  onTap: () => context
+                      .read<ProfileCubit>()
+                      .toggleDietaryPreference(pref),
+                );
+              }),
+
               const SizedBox(height: 20),
-
               const SectionHeader(title: 'Dị ứng thực phẩm'),
               const SizedBox(height: 10),
               Card(
@@ -82,23 +76,23 @@ class DietaryPreferenceScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Bạn đã khai báo ${profile.allAllergies.length} dị ứng',
+                        'Bạn đã khai báo ${state.profile.allAllergies.length} dị ứng',
                         style: const TextStyle(fontWeight: FontWeight.w600),
                       ),
                       const SizedBox(height: 8),
-                      if (profile.allAllergies.isNotEmpty)
+                      if (state.profile.allAllergies.isNotEmpty)
                         Wrap(
                           spacing: 8,
                           runSpacing: 6,
-                          children: profile.allAllergies
+                          children: state.profile.allAllergies
                               .map((a) => Chip(
                                     label: Text(a,
                                         style: const TextStyle(fontSize: 12)),
                                     backgroundColor:
                                         AppColors.danger.withOpacity(0.1),
                                     side: BorderSide(
-                                        color: AppColors.danger
-                                            .withOpacity(0.3)),
+                                        color:
+                                            AppColors.danger.withOpacity(0.3)),
                                   ))
                               .toList(),
                         ),
@@ -119,59 +113,130 @@ class DietaryPreferenceScreen extends StatelessWidget {
   }
 }
 
-class _DietaryOption extends StatelessWidget {
-  final String emoji;
-  final String title;
-  final String subtitle;
+class _DietaryCard extends StatelessWidget {
+  final DietaryPreference pref;
   final bool isSelected;
   final VoidCallback onTap;
-  final VoidCallback onDetailTap;
 
-  const _DietaryOption({
-    required this.emoji,
-    required this.title,
-    required this.subtitle,
+  const _DietaryCard({
+    required this.pref,
     required this.isSelected,
     required this.onTap,
-    required this.onDetailTap,
   });
 
   @override
   Widget build(BuildContext context) {
+    const orange = Color(0xFFE65100);
     return Card(
       margin: const EdgeInsets.only(bottom: 10),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
         side: BorderSide(
-          color: isSelected ? AppColors.primary : Colors.transparent,
+          color: isSelected ? orange : Colors.transparent,
           width: 2,
         ),
       ),
-      child: ListTile(
-        leading: Text(emoji, style: const TextStyle(fontSize: 26)),
-        title: Text(title,
-            style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14)),
-        subtitle: Text(subtitle,
-            style: TextStyle(fontSize: 12, color: Colors.grey[600])),
-        trailing: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            GestureDetector(
-              onTap: onDetailTap,
-              child: const Padding(
-                padding: EdgeInsets.only(right: 8),
-                child: Icon(Icons.info_outline,
-                    color: AppColors.primary, size: 18),
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(12),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          child: Row(
+            children: [
+              Text(_emoji, style: const TextStyle(fontSize: 26)),
+              const SizedBox(width: 14),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      _label,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 14,
+                        color: isSelected ? orange : null,
+                      ),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      _description,
+                      style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+                    ),
+                  ],
+                ),
               ),
-            ),
-            Switch(
-              value: isSelected,
-              onChanged: (_) => onTap(),
-              activeColor: AppColors.primary,
-            ),
-          ],
+              const SizedBox(width: 8),
+              AnimatedContainer(
+                duration: const Duration(milliseconds: 200),
+                width: 24,
+                height: 24,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: isSelected ? orange : Colors.transparent,
+                  border: Border.all(
+                    color: isSelected ? orange : Colors.grey[400]!,
+                    width: 2,
+                  ),
+                ),
+                child: isSelected
+                    ? const Icon(Icons.check, color: Colors.white, size: 14)
+                    : null,
+              ),
+            ],
+          ),
         ),
       ),
     );
+  }
+
+  String get _emoji {
+    switch (pref) {
+      case DietaryPreference.glutenFree:
+        return '🌾';
+      case DietaryPreference.lactoseFree:
+        return '🥛';
+      case DietaryPreference.lowSugar:
+        return '🍬';
+      case DietaryPreference.lowSalt:
+        return '🧂';
+      case DietaryPreference.keto:
+        return '🥑';
+      case DietaryPreference.paleo:
+        return '🥩';
+    }
+  }
+
+  String get _label {
+    switch (pref) {
+      case DietaryPreference.glutenFree:
+        return 'Không Gluten';
+      case DietaryPreference.lactoseFree:
+        return 'Không Lactose';
+      case DietaryPreference.lowSugar:
+        return 'Ít đường';
+      case DietaryPreference.lowSalt:
+        return 'Ít muối';
+      case DietaryPreference.keto:
+        return 'Keto';
+      case DietaryPreference.paleo:
+        return 'Paleo';
+    }
+  }
+
+  String get _description {
+    switch (pref) {
+      case DietaryPreference.glutenFree:
+        return 'Tránh lúa mì, lúa mạch và các sản phẩm chứa gluten';
+      case DietaryPreference.lactoseFree:
+        return 'Tránh sữa và các sản phẩm từ sữa chứa lactose';
+      case DietaryPreference.lowSugar:
+        return 'Hạn chế đường và thực phẩm có chỉ số đường huyết cao';
+      case DietaryPreference.lowSalt:
+        return 'Hạn chế natri và thực phẩm chế biến nhiều muối';
+      case DietaryPreference.keto:
+        return 'Chế độ ăn ít carb, nhiều chất béo lành mạnh';
+      case DietaryPreference.paleo:
+        return 'Chỉ thực phẩm tự nhiên, tránh thực phẩm chế biến';
+    }
   }
 }
