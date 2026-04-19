@@ -130,6 +130,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                   ],
                 ),
               ),
+              SizedBox(height: MediaQuery.of(context).viewPadding.bottom + 8),
             ],
           ),
         );

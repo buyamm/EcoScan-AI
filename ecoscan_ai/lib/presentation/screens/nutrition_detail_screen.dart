@@ -17,7 +17,10 @@ class NutritionDetailScreen extends StatelessWidget {
       body: n == null
           ? const Center(child: Text('Không có thông tin dinh dưỡng'))
           : ListView(
-              padding: const EdgeInsets.all(16),
+              padding: EdgeInsets.only(
+                left: 16, right: 16, top: 16,
+                bottom: 16 + MediaQuery.of(context).viewPadding.bottom,
+              ),
               children: [
                 // Product name header
                 Text(

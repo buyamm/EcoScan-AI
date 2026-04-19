@@ -125,6 +125,7 @@ class _ExportDataScreenState extends State<ExportDataScreen> {
               ),
             ),
           ],
+          SizedBox(height: MediaQuery.of(context).viewPadding.bottom + 8),
         ],
       ),
     );

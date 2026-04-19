@@ -98,13 +98,14 @@ class DietaryPreferenceScreen extends StatelessWidget {
                         ),
                       const SizedBox(height: 10),
                       OutlinedButton(
-                        onPressed: () => context.go('/profile/allergies'),
+                        onPressed: () => context.push('/profile/allergies'),
                         child: const Text('Quản lý dị ứng'),
                       ),
                     ],
                   ),
                 ),
               ),
+              SizedBox(height: MediaQuery.of(context).viewPadding.bottom + 8),
             ],
           ),
         );

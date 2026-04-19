@@ -59,7 +59,10 @@ class ScanHistoryScreen extends StatelessWidget {
           return RefreshIndicator(
             onRefresh: () async => context.read<HistoryCubit>().loadHistory(),
             child: ListView.separated(
-              padding: const EdgeInsets.symmetric(vertical: 8),
+              padding: EdgeInsets.only(
+                top: 8,
+                bottom: 8 + MediaQuery.of(context).viewPadding.bottom,
+              ),
               itemCount: records.length,
               separatorBuilder: (_, __) => const Divider(height: 1, indent: 16),
               itemBuilder: (context, index) {

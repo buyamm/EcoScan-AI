@@ -114,6 +114,7 @@ class EcoTrendScreen extends StatelessWidget {
               _TrendLegend(),
               const SizedBox(height: 20),
               _TrendInsight(records: records),
+              SizedBox(height: MediaQuery.of(context).viewPadding.bottom + 8),
             ],
           ),
         );

@@ -22,7 +22,10 @@ class ScoreHistoryScreen extends StatelessWidget {
                       style: TextStyle(color: Colors.grey[500])),
                 )
               : ListView.separated(
-                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  padding: EdgeInsets.only(
+                    top: 8,
+                    bottom: 8 + MediaQuery.of(context).viewPadding.bottom,
+                  ),
                   itemCount: records.length,
                   separatorBuilder: (_, __) =>
                       const Divider(height: 1, indent: 72),

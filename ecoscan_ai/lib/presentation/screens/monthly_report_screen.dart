@@ -150,6 +150,7 @@ class _MonthlyReportScreenState extends State<MonthlyReportScreen> {
                       fontSize: 15, fontWeight: FontWeight.w700)),
               const SizedBox(height: 10),
               _WeekTable(weekData: weekData),
+              SizedBox(height: MediaQuery.of(context).viewPadding.bottom + 8),
             ],
           ),
         );

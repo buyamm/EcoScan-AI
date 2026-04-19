@@ -107,13 +107,16 @@ class _IngredientBreakdownScreenState extends State<IngredientBreakdownScreen> {
                     ),
                   )
                 : ListView.builder(
-                    padding: const EdgeInsets.only(top: 8, bottom: 16),
+                    padding: EdgeInsets.only(
+                      top: 8,
+                      bottom: 16 + MediaQuery.of(context).viewPadding.bottom,
+                    ),
                     itemCount: _filtered.length,
                     itemBuilder: (context, index) {
                       final ingredient = _filtered[index];
                       return IngredientCard(
                         ingredient: ingredient,
-                        onTap: () => context.go(
+                        onTap: () => context.push(
                           '/ingredient/detail',
                           extra: ingredient,
                         ),

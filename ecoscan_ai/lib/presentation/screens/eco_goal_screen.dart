@@ -148,6 +148,7 @@ class EcoGoalScreen extends StatelessWidget {
                   label: const Text('Quét sản phẩm'),
                 ),
               ),
+              SizedBox(height: MediaQuery.of(context).viewPadding.bottom + 8),
             ],
           ),
         );

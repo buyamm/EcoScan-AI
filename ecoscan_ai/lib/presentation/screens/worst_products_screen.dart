@@ -50,8 +50,10 @@ class WorstProductsScreen extends StatelessWidget {
                     ),
                     Expanded(
                       child: ListView.separated(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 16),
+                        padding: EdgeInsets.only(
+                          left: 16, right: 16,
+                          bottom: 16 + MediaQuery.of(context).viewPadding.bottom,
+                        ),
                         itemCount: worst.length,
                         separatorBuilder: (_, __) =>
                             const SizedBox(height: 10),

@@ -175,6 +175,7 @@ class AIPersonalizedScreen extends StatelessWidget {
                   child: const Text('Xem chi tiết đầy đủ'),
                 ),
               ),
+              SizedBox(height: MediaQuery.of(context).viewPadding.bottom + 8),
             ],
           ),
         );

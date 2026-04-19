@@ -117,6 +117,7 @@ class _ImpactChartScreenState extends State<ImpactChartScreen> {
                     count: s.count,
                     total: total,
                   )),
+              SizedBox(height: MediaQuery.of(context).viewPadding.bottom + 8),
             ],
           ),
         );

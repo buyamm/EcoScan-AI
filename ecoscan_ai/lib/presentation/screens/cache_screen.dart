@@ -167,6 +167,7 @@ class _CacheScreenState extends State<CacheScreen> {
               ],
             ),
           ),
+          SizedBox(height: MediaQuery.of(context).viewPadding.bottom + 8),
         ],
       ),
     );

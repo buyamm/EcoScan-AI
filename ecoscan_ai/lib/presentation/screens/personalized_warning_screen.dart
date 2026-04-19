@@ -177,6 +177,7 @@ class PersonalizedWarningScreen extends StatelessWidget {
               child: const Text('Vẫn xem chi tiết sản phẩm'),
             ),
           ),
+          SizedBox(height: MediaQuery.of(context).viewPadding.bottom + 8),
         ],
       ),
     );

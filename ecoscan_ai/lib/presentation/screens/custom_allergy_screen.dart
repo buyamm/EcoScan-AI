@@ -44,7 +44,9 @@ class _CustomAllergyScreenState extends State<CustomAllergyScreen> {
     return Scaffold(
       appBar: AppBar(title: const Text('Thêm dị ứng tùy chỉnh')),
       body: Padding(
-        padding: const EdgeInsets.all(24),
+        padding: EdgeInsets.fromLTRB(
+          24, 24, 24, 24 + MediaQuery.of(context).viewPadding.bottom,
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

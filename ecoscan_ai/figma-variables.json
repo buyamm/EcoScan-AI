@@ -1,0 +1,208 @@
+{
+    "version": "1.0",
+    "name": "EcoScan AI Design System",
+    "description": "Color variables for EcoScan AI mobile app",
+    "variables": {
+        "colors": {
+            "primary": {
+                "green-700": {
+                    "name": "Primary/Green-700",
+                    "type": "color",
+                    "value": "#1B5E20",
+                    "description": "Dark green for gradients and emphasis"
+                },
+                "green-600": {
+                    "name": "Primary/Green-600",
+                    "type": "color",
+                    "value": "#558B2F",
+                    "description": "Medium green for secondary elements"
+                },
+                "green-500": {
+                    "name": "Primary/Green-500",
+                    "type": "color",
+                    "value": "#2E7D32",
+                    "description": "Primary brand color - main green"
+                },
+                "green-300": {
+                    "name": "Primary/Green-300",
+                    "type": "color",
+                    "value": "#81C784",
+                    "description": "Light green for secondary elements and accents"
+                }
+            },
+            "semantic": {
+                "warning-500": {
+                    "name": "Warning/Yellow-500",
+                    "type": "color",
+                    "value": "#F9A825",
+                    "description": "Warning color for medium eco scores and cautions"
+                },
+                "danger-500": {
+                    "name": "Danger/Red-500",
+                    "type": "color",
+                    "value": "#C62828",
+                    "description": "Danger color for poor eco scores and allergen warnings"
+                }
+            },
+            "orange": {
+                "orange-500": {
+                    "name": "Orange/500",
+                    "type": "color",
+                    "value": "#E65100",
+                    "description": "Primary orange for dietary preferences and nutrition"
+                },
+                "orange-400": {
+                    "name": "Orange/400",
+                    "type": "color",
+                    "value": "#FF8F00",
+                    "description": "Light orange for gradients and highlights"
+                }
+            },
+            "background": {
+                "light": {
+                    "name": "Background/Light",
+                    "type": "color",
+                    "value": "#F1F8E9",
+                    "description": "Light theme background - very light green"
+                },
+                "dark": {
+                    "name": "Background/Dark",
+                    "type": "color",
+                    "value": "#1B2A1B",
+                    "description": "Dark theme background - dark green"
+                }
+            },
+            "surface": {
+                "light": {
+                    "name": "Surface/Light",
+                    "type": "color",
+                    "value": "#FFFFFF",
+                    "description": "Light theme surface - white"
+                },
+                "dark": {
+                    "name": "Surface/Dark",
+                    "type": "color",
+                    "value": "#2A3D2A",
+                    "description": "Dark theme surface - dark green"
+                }
+            },
+            "accent": {
+                "google-blue": {
+                    "name": "Accent/Google-Blue",
+                    "type": "color",
+                    "value": "#4285F4",
+                    "description": "Google brand blue for Google Sign-in button"
+                }
+            }
+        }
+    },
+    "collections": [
+        {
+            "name": "EcoScan Colors",
+            "modes": [
+                {
+                    "name": "Light",
+                    "variables": {
+                        "primary": "#2E7D32",
+                        "secondary": "#81C784",
+                        "warning": "#F9A825",
+                        "danger": "#C62828",
+                        "background": "#F1F8E9",
+                        "surface": "#FFFFFF"
+                    }
+                },
+                {
+                    "name": "Dark",
+                    "variables": {
+                        "primary": "#81C784",
+                        "secondary": "#2E7D32",
+                        "warning": "#F9A825",
+                        "danger": "#C62828",
+                        "background": "#1B2A1B",
+                        "surface": "#2A3D2A"
+                    }
+                }
+            ]
+        }
+    ],
+    "tokens": [
+        {
+            "name": "Primary/Green-700",
+            "value": "#1B5E20",
+            "type": "color",
+            "description": "Dark green for gradients and emphasis"
+        },
+        {
+            "name": "Primary/Green-600",
+            "value": "#558B2F",
+            "type": "color",
+            "description": "Medium green for secondary elements"
+        },
+        {
+            "name": "Primary/Green-500",
+            "value": "#2E7D32",
+            "type": "color",
+            "description": "Primary brand color - main green"
+        },
+        {
+            "name": "Primary/Green-300",
+            "value": "#81C784",
+            "type": "color",
+            "description": "Light green for secondary elements and accents"
+        },
+        {
+            "name": "Warning/Yellow-500",
+            "value": "#F9A825",
+            "type": "color",
+            "description": "Warning color for medium eco scores and cautions"
+        },
+        {
+            "name": "Danger/Red-500",
+            "value": "#C62828",
+            "type": "color",
+            "description": "Danger color for poor eco scores and allergen warnings"
+        },
+        {
+            "name": "Orange/500",
+            "value": "#E65100",
+            "type": "color",
+            "description": "Primary orange for dietary preferences and nutrition"
+        },
+        {
+            "name": "Orange/400",
+            "value": "#FF8F00",
+            "type": "color",
+            "description": "Light orange for gradients and highlights"
+        },
+        {
+            "name": "Background/Light",
+            "value": "#F1F8E9",
+            "type": "color",
+            "description": "Light theme background - very light green"
+        },
+        {
+            "name": "Background/Dark",
+            "value": "#1B2A1B",
+            "type": "color",
+            "description": "Dark theme background - dark green"
+        },
+        {
+            "name": "Surface/Light",
+            "value": "#FFFFFF",
+            "type": "color",
+            "description": "Light theme surface - white"
+        },
+        {
+            "name": "Surface/Dark",
+            "value": "#2A3D2A",
+            "type": "color",
+            "description": "Dark theme surface - dark green"
+        },
+        {
+            "name": "Accent/Google-Blue",
+            "value": "#4285F4",
+            "type": "color",
+            "description": "Google brand blue for Google Sign-in button"
+        }
+    ]
+}

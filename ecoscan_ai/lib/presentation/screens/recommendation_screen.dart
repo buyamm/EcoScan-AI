@@ -59,6 +59,7 @@ class RecommendationScreen extends StatelessWidget {
                         ...recommendations.map((r) => _RecCard(rec: r)),
                         const SizedBox(height: 16),
                         ..._buildWorstSection(context, records),
+                        SizedBox(height: MediaQuery.of(context).viewPadding.bottom + 8),
                       ],
                     ),
             );
@@ -78,7 +79,7 @@ class RecommendationScreen extends StatelessWidget {
       const SectionHeader(title: 'Sản phẩm cần thay thế'),
       ...worstProducts.map((r) => ProductListTile.fromScanRecord(
             r,
-            onTap: () => context.go('/history/detail', extra: r),
+            onTap: () => context.push('/history/detail', extra: r),
           )),
     ];
   }
@@ -204,7 +205,7 @@ class _RecCard extends StatelessWidget {
                 style: OutlinedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 14, vertical: 6)),
-                onPressed: () => context.go(rec.route!),
+                onPressed: () => context.push(rec.route!),
                 child: Text(rec.action!,
                     style: const TextStyle(fontSize: 13)),
               ),

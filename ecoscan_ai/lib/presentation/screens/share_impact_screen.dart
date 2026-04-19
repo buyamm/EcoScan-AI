@@ -87,6 +87,7 @@ class _ShareImpactScreenState extends State<ShareImpactScreen> {
                   Text(_sharing ? 'Đang chia sẻ...' : 'Chia sẻ ngay'),
             ),
           ),
+          SizedBox(height: MediaQuery.of(context).viewPadding.bottom + 8),
         ],
       ),
     );

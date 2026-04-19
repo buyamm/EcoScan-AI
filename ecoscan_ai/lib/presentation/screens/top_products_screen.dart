@@ -25,7 +25,10 @@ class TopProductsScreen extends StatelessWidget {
                       style: TextStyle(color: Colors.grey[500])),
                 )
               : ListView.separated(
-                  padding: const EdgeInsets.all(16),
+                  padding: EdgeInsets.only(
+                    left: 16, right: 16, top: 16,
+                    bottom: 16 + MediaQuery.of(context).viewPadding.bottom,
+                  ),
                   itemCount: top.length,
                   separatorBuilder: (_, __) =>
                       const SizedBox(height: 10),

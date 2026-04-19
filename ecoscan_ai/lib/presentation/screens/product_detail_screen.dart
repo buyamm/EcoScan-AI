@@ -203,6 +203,7 @@ class ProductDetailScreen extends StatelessWidget {
                   product: product,
                   analysis: analysis,
                 ),
+                SizedBox(height: MediaQuery.of(context).viewPadding.bottom),
               ],
             ),
           ),
@@ -347,7 +348,7 @@ class _PersonalizedSection extends StatelessWidget {
               ),
             ),
             TextButton(
-              onPressed: () => context.go('/profile/setup'),
+              onPressed: () => context.push('/profile/setup'),
               child: const Text('Thiết lập'),
             ),
           ],

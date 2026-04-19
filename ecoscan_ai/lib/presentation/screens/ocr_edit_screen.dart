@@ -49,7 +49,7 @@ class _OCREditScreenState extends State<OCREditScreen> {
       return;
     }
     context.read<AIBloc>().add(AnalyzeOCRText(text));
-    context.go('/ai/loading');
+    context.push('/ai/loading');
   }
 
   @override

@@ -121,6 +121,7 @@ class AIExplanationScreen extends StatelessWidget {
             _RawTextSection(rawText: analysis.rawText!),
           ],
           const SizedBox(height: 16),
+          SizedBox(height: MediaQuery.of(context).viewPadding.bottom),
         ],
       ),
     );

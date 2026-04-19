@@ -111,10 +111,11 @@ class EcoPreferenceScreen extends StatelessWidget {
               ),
               const SizedBox(height: 20),
               OutlinedButton.icon(
-                onPressed: () => context.go('/profile/eco-goal'),
+                onPressed: () => context.push('/profile/eco-goal'),
                 icon: const Icon(Icons.flag_outlined),
                 label: const Text('Đặt mục tiêu môi trường'),
               ),
+              SizedBox(height: MediaQuery.of(context).viewPadding.bottom + 8),
             ],
           ),
         );

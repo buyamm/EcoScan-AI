@@ -19,12 +19,13 @@ class ScanLoadingScreen extends StatelessWidget {
         BlocListener<ScanBloc, ScanState>(
           listener: (context, state) {
             if (state is ScanSuccess) {
-              context.go('/product/found', extra: state.product);
+              context.pushReplacement('/product/found', extra: state.product);
             } else if (state is ScanError) {
               if (state.type == ScanErrorType.productNotFound) {
-                context.go('/product/not-found', extra: state.barcode);
+                context.pushReplacement(
+                    '/product/not-found', extra: state.barcode);
               } else {
-                context.go('/error/network');
+                context.pushReplacement('/error/network');
               }
             }
           },

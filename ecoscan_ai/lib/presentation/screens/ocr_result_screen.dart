@@ -23,7 +23,7 @@ class OCRResultScreen extends StatelessWidget {
       return;
     }
     context.read<AIBloc>().add(AnalyzeOCRText(trimmed));
-    context.go('/ai/loading');
+    context.push('/ai/loading');
   }
 
   @override
@@ -33,7 +33,7 @@ class OCRResultScreen extends StatelessWidget {
         title: const Text('Kết quả OCR'),
         actions: [
           TextButton(
-            onPressed: () => context.go('/scan/ocr/edit', extra: ocrText),
+            onPressed: () => context.push('/scan/ocr/edit', extra: ocrText),
             child: const Text(
               'Chỉnh sửa',
               style: TextStyle(color: Colors.white),
@@ -124,7 +124,7 @@ class OCRResultScreen extends StatelessWidget {
                   width: double.infinity,
                   child: OutlinedButton.icon(
                     onPressed: () =>
-                        context.go('/scan/ocr/edit', extra: ocrText),
+                        context.push('/scan/ocr/edit', extra: ocrText),
                     icon: const Icon(Icons.edit_outlined),
                     label: const Text('Chỉnh sửa văn bản'),
                   ),

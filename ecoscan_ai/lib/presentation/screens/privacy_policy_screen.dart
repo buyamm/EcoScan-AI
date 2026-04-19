@@ -10,8 +10,8 @@ class PrivacyPolicyScreen extends StatelessWidget {
       appBar: AppBar(title: const Text('Chính sách quyền riêng tư')),
       body: ListView(
         padding: const EdgeInsets.all(16),
-        children: const [
-          _Section(
+        children: [
+          const _Section(
             title: '1. Dữ liệu lưu trữ trên thiết bị',
             content: 'EcoScan AI lưu trữ toàn bộ dữ liệu người dùng CỤC BỘ trên thiết bị của bạn, bao gồm:\n\n'
                 '• Lịch sử quét sản phẩm (tối đa 500 bản ghi)\n'
@@ -20,7 +20,7 @@ class PrivacyPolicyScreen extends StatelessWidget {
                 '• Cài đặt ứng dụng: ngôn ngữ, giao diện, cỡ chữ\n\n'
                 'Dữ liệu này KHÔNG được gửi lên bất kỳ server nào của chúng tôi.',
           ),
-          _Section(
+          const _Section(
             title: '2. Dữ liệu gửi đến API bên ngoài',
             content: 'Khi bạn quét sản phẩm, ứng dụng gửi dữ liệu sau đến API bên ngoài:\n\n'
                 '• Mã vạch sản phẩm → Open Food Facts API (openfoodfacts.org)\n'
@@ -64,6 +64,7 @@ class PrivacyPolicyScreen extends StatelessWidget {
             textAlign: TextAlign.center,
           ),
           SizedBox(height: 16),
+          SizedBox(height: MediaQuery.of(context).viewPadding.bottom),
         ],
       ),
     );

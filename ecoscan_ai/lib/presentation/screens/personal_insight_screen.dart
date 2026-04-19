@@ -85,11 +85,12 @@ class PersonalInsightScreen extends StatelessWidget {
                           width: double.infinity,
                           child: OutlinedButton.icon(
                             onPressed: () =>
-                                context.go('/profile/recommendations'),
+                                context.push('/profile/recommendations'),
                             icon: const Icon(Icons.thumb_up_outlined),
                             label: const Text('Xem gợi ý cải thiện'),
                           ),
                         ),
+                        SizedBox(height: MediaQuery.of(context).viewPadding.bottom + 8),
                       ],
                     ),
             );

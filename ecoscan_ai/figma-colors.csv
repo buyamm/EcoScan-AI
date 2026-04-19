@@ -1,0 +1,14 @@
+Name,Value,Description,Category
+Primary/Green-700,#1B5E20,Dark green for gradients and emphasis,Primary
+Primary/Green-600,#558B2F,Medium green for secondary elements,Primary
+Primary/Green-500,#2E7D32,Primary brand color - main green,Primary
+Primary/Green-300,#81C784,Light green for secondary elements and accents,Primary
+Warning/Yellow-500,#F9A825,Warning color for medium eco scores and cautions,Semantic
+Danger/Red-500,#C62828,Danger color for poor eco scores and allergen warnings,Semantic
+Orange/500,#E65100,Primary orange for dietary preferences and nutrition,Orange
+Orange/400,#FF8F00,Light orange for gradients and highlights,Orange
+Background/Light,#F1F8E9,Light theme background - very light green,Background
+Background/Dark,#1B2A1B,Dark theme background - dark green,Background
+Surface/Light,#FFFFFF,Light theme surface - white,Surface
+Surface/Dark,#2A3D2A,Dark theme surface - dark green,Surface
+Accent/Google-Blue,#4285F4,Google brand blue for Google Sign-in button,Accent

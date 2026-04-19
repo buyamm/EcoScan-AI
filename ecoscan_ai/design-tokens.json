@@ -1,0 +1,95 @@
+{
+    "$schema": "https://schemas.figma.com/design-tokens/v1.0.0/schema.json",
+    "$metadata": {
+        "tokenSetOrder": [
+            "colors"
+        ]
+    },
+    "colors": {
+        "primary": {
+            "green": {
+                "700": {
+                    "$type": "color",
+                    "$value": "#1B5E20",
+                    "$description": "Dark green for gradients and emphasis"
+                },
+                "600": {
+                    "$type": "color",
+                    "$value": "#558B2F",
+                    "$description": "Medium green for secondary elements"
+                },
+                "500": {
+                    "$type": "color",
+                    "$value": "#2E7D32",
+                    "$description": "Primary brand color - main green"
+                },
+                "300": {
+                    "$type": "color",
+                    "$value": "#81C784",
+                    "$description": "Light green for secondary elements and accents"
+                }
+            }
+        },
+        "warning": {
+            "yellow": {
+                "500": {
+                    "$type": "color",
+                    "$value": "#F9A825",
+                    "$description": "Warning color for medium eco scores and cautions"
+                }
+            }
+        },
+        "danger": {
+            "red": {
+                "500": {
+                    "$type": "color",
+                    "$value": "#C62828",
+                    "$description": "Danger color for poor eco scores and allergen warnings"
+                }
+            }
+        },
+        "orange": {
+            "500": {
+                "$type": "color",
+                "$value": "#E65100",
+                "$description": "Primary orange for dietary preferences and nutrition"
+            },
+            "400": {
+                "$type": "color",
+                "$value": "#FF8F00",
+                "$description": "Light orange for gradients and highlights"
+            }
+        },
+        "background": {
+            "light": {
+                "$type": "color",
+                "$value": "#F1F8E9",
+                "$description": "Light theme background - very light green"
+            },
+            "dark": {
+                "$type": "color",
+                "$value": "#1B2A1B",
+                "$description": "Dark theme background - dark green"
+            }
+        },
+        "surface": {
+            "light": {
+                "$type": "color",
+                "$value": "#FFFFFF",
+                "$description": "Light theme surface - white"
+            },
+            "dark": {
+                "$type": "color",
+                "$value": "#2A3D2A",
+                "$description": "Dark theme surface - dark green"
+            }
+        },
+        "accent": {
+            "google-blue": {
+                "$type": "color",
+                "$value": "#4285F4",
+                "$description": "Google brand blue for Google Sign-in button"
+            }
+        }
+    }
+}

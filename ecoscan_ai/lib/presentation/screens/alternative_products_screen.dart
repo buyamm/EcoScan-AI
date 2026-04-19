@@ -235,7 +235,10 @@ class _AlternativeProductsScreenState
     }
 
     return ListView(
-      padding: const EdgeInsets.symmetric(vertical: 8),
+      padding: EdgeInsets.only(
+        top: 8,
+        bottom: 8 + MediaQuery.of(context).viewPadding.bottom,
+      ),
       children: [
         Padding(
           padding: const EdgeInsets.fromLTRB(16, 8, 16, 4),

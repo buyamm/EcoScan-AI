@@ -164,6 +164,7 @@ class HealthGoalScreen extends StatelessWidget {
                   label: const Text('Quét sản phẩm ngay'),
                 ),
               ),
+              SizedBox(height: MediaQuery.of(context).viewPadding.bottom + 8),
             ],
           ),
         );

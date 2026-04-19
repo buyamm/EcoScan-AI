@@ -91,7 +91,7 @@ class _OCRScanScreenState extends State<OCRScanScreen>
               : (state as OCRTextDetected).rawText;
           if (!_processing) {
             setState(() => _processing = true);
-            context.go('/scan/ocr/result', extra: text);
+            context.push('/scan/ocr/result', extra: text);
           }
         } else if (state is OCRError) {
           setState(() => _capturing = false);

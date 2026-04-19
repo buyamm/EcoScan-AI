@@ -163,6 +163,7 @@ class _NotificationPreferenceScreenState
                   ),
                 ),
               ),
+              SizedBox(height: MediaQuery.of(context).viewPadding.bottom + 8),
             ],
           ),
         );

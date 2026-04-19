@@ -42,7 +42,7 @@ class BarcodeNotReadableScreen extends StatelessWidget {
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton.icon(
-                  onPressed: () => context.go('/scan/ocr'),
+                  onPressed: () => context.push('/scan/ocr'),
                   icon: const Icon(Icons.text_fields),
                   label: const Text('Thử quét nhãn OCR'),
                 ),
@@ -51,7 +51,7 @@ class BarcodeNotReadableScreen extends StatelessWidget {
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton.icon(
-                  onPressed: () => context.go('/scan/manual'),
+                  onPressed: () => context.push('/scan/manual'),
                   icon: const Icon(Icons.keyboard),
                   label: const Text('Nhập mã thủ công'),
                 ),

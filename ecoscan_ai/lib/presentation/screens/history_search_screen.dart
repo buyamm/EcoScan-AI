@@ -83,7 +83,10 @@ class _HistorySearchScreenState extends State<HistorySearchScreen> {
             );
           }
           return ListView.separated(
-            padding: const EdgeInsets.symmetric(vertical: 8),
+            padding: EdgeInsets.only(
+              top: 8,
+              bottom: 8 + MediaQuery.of(context).viewPadding.bottom,
+            ),
             itemCount: results.length,
             separatorBuilder: (_, __) =>
                 const Divider(height: 1, indent: 16),

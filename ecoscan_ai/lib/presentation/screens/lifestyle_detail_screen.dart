@@ -89,6 +89,7 @@ class LifestyleDetailScreen extends StatelessWidget {
                       : 'Áp dụng lối sống này'),
                 ),
               ),
+              SizedBox(height: MediaQuery.of(context).viewPadding.bottom + 8),
             ],
           ),
         );

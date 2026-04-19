@@ -154,6 +154,7 @@ class _WeeklyReportScreenState extends State<WeeklyReportScreen> {
                       fontSize: 15, fontWeight: FontWeight.w700)),
               const SizedBox(height: 10),
               _WeekSummary(dayData: dayData),
+              SizedBox(height: MediaQuery.of(context).viewPadding.bottom + 8),
             ],
           ),
         );

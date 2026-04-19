@@ -84,6 +84,7 @@ class HealthAnalysisScreen extends StatelessWidget {
                     i.safety == IngredientSafety.avoid)
                 .map((i) => IngredientCard(ingredient: i)),
           ],
+          SizedBox(height: MediaQuery.of(context).viewPadding.bottom + 8),
         ],
       ),
     );

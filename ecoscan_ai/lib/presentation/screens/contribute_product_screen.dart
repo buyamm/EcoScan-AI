@@ -173,6 +173,7 @@ class ContributeProductScreen extends StatelessWidget {
               child: const Text('Quay lại'),
             ),
           ),
+          SizedBox(height: MediaQuery.of(context).viewPadding.bottom + 8),
         ],
       ),
     );

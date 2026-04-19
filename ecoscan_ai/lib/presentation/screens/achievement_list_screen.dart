@@ -30,6 +30,7 @@ class AchievementListScreen extends StatelessWidget {
                     onTap: () => context.push('/achievements/detail',
                         extra: a),
                   )),
+              SizedBox(height: MediaQuery.of(context).viewPadding.bottom),
             ],
           ),
         );

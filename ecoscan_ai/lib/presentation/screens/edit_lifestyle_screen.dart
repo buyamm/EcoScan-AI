@@ -76,7 +76,7 @@ class EditLifestyleScreen extends StatelessWidget {
                                         fontSize: 13, color: Colors.grey[600])),
                                 const SizedBox(height: 6),
                                 GestureDetector(
-                                  onTap: () => context.go(
+                                  onTap: () => context.push(
                                       '/profile/lifestyle/detail',
                                       extra: option),
                                   child: Text('Tìm hiểu thêm →',
@@ -101,6 +101,7 @@ class EditLifestyleScreen extends StatelessWidget {
                   ),
                 );
               }),
+              SizedBox(height: MediaQuery.of(context).viewPadding.bottom),
             ],
           ),
         );

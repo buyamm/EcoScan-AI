@@ -16,22 +16,27 @@ class CategoryBreakdownScreen extends StatelessWidget {
         return Scaffold(
           appBar: AppBar(title: const Text('Phân tích theo danh mục')),
           body: categoryMap.isEmpty
-              ? Center(
-                  child: Text('Chưa có dữ liệu.',
-                      style: TextStyle(color: Colors.grey[500])),
+              ? const Center(
+                  child: SafeArea(
+                    child: Text('Chưa có dữ liệu.',
+                        style: TextStyle(color: Colors.grey)),
+                  ),
                 )
-              : ListView.separated(
-                  padding: const EdgeInsets.all(16),
-                  itemCount: categoryMap.length,
-                  separatorBuilder: (_, __) => const SizedBox(height: 10),
-                  itemBuilder: (context, index) {
-                    final entry =
-                        categoryMap.entries.elementAt(index);
-                    final category = entry.key;
-                    final stats = entry.value;
-                    return _CategoryCard(
-                        category: category, stats: stats);
-                  },
+              : SafeArea(
+                  top: false,
+                  child: ListView.separated(
+                    padding: const EdgeInsets.all(16),
+                    itemCount: categoryMap.length,
+                    separatorBuilder: (_, __) => const SizedBox(height: 10),
+                    itemBuilder: (context, index) {
+                      final entry =
+                          categoryMap.entries.elementAt(index);
+                      final category = entry.key;
+                      final stats = entry.value;
+                      return _CategoryCard(
+                          category: category, stats: stats);
+                    },
+                  ),
                 ),
         );
       },

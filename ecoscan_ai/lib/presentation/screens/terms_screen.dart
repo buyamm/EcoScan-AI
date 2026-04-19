@@ -10,8 +10,8 @@ class TermsScreen extends StatelessWidget {
       appBar: AppBar(title: const Text('Điều khoản sử dụng')),
       body: ListView(
         padding: const EdgeInsets.all(16),
-        children: const [
-          _Section(
+        children: [
+          const _Section(
             title: '1. Chấp nhận điều khoản',
             content:
                 'Bằng việc tải xuống và sử dụng EcoScan AI, bạn đồng ý với các điều khoản sử dụng này. Nếu không đồng ý, vui lòng gỡ cài đặt ứng dụng.',
@@ -58,6 +58,7 @@ class TermsScreen extends StatelessWidget {
             textAlign: TextAlign.center,
           ),
           SizedBox(height: 24),
+          SizedBox(height: MediaQuery.of(context).viewPadding.bottom),
         ],
       ),
     );

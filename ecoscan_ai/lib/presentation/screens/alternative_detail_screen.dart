@@ -122,11 +122,12 @@ class AlternativeDetailScreen extends StatelessWidget {
           SizedBox(
             width: double.infinity,
             child: ElevatedButton.icon(
-              onPressed: () => context.go('/scan/manual'),
+              onPressed: () => context.push('/scan/manual'),
               icon: const Icon(Icons.qr_code_scanner),
               label: const Text('Quét sản phẩm này'),
             ),
           ),
+          SizedBox(height: MediaQuery.of(context).viewPadding.bottom + 8),
         ],
       ),
     );

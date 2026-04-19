@@ -79,7 +79,7 @@ class GreenwashingDetectorScreen extends StatelessWidget {
               return _ClaimCard(
                 claim: claim,
                 level: gw.level,
-                onTap: () => context.go(
+                onTap: () => context.push(
                   '/product/greenwashing/detail',
                   extra: {'claim': claim, 'level': gw.level},
                 ),
@@ -118,6 +118,7 @@ class GreenwashingDetectorScreen extends StatelessWidget {
               ),
             ),
           ),
+          SizedBox(height: MediaQuery.of(context).viewPadding.bottom + 8),
         ],
       ),
     );

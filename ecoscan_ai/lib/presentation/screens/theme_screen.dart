@@ -86,6 +86,7 @@ class ThemeScreen extends StatelessWidget {
                   ],
                 ),
               ),
+              SizedBox(height: MediaQuery.of(context).viewPadding.bottom),
             ],
           ),
         );

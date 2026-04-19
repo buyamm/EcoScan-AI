@@ -53,7 +53,7 @@ class ProductNotFoundScreen extends StatelessWidget {
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton.icon(
-                  onPressed: () => context.go('/scan/ocr'),
+                  onPressed: () => context.push('/scan/ocr'),
                   icon: const Icon(Icons.text_fields),
                   label: const Text('Thử quét nhãn OCR'),
                 ),
@@ -62,8 +62,7 @@ class ProductNotFoundScreen extends StatelessWidget {
               SizedBox(
                 width: double.infinity,
                 child: OutlinedButton.icon(
-                  onPressed: () =>
-                      context.go('/product/contribute'),
+                  onPressed: () => context.push('/product/contribute'),
                   icon: const Icon(Icons.add_circle_outline),
                   label: const Text('Đóng góp sản phẩm'),
                 ),

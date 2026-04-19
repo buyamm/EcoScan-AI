@@ -171,6 +171,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
               label: const Text('Sao chép địa chỉ email'),
             ),
           ),
+          SizedBox(height: MediaQuery.of(context).viewPadding.bottom + 8),
         ],
       ),
     );

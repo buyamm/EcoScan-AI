@@ -74,6 +74,7 @@ class ProfileAchievementScreen extends StatelessWidget {
                     .where((a) => !a.earned)
                     .map((a) => _AchievementCard(achievement: a)),
               ],
+              SizedBox(height: MediaQuery.of(context).viewPadding.bottom + 8),
             ],
           ),
         );

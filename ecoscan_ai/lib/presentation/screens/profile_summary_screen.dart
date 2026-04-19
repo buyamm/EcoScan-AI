@@ -156,11 +156,12 @@ class ProfileSummaryScreen extends StatelessWidget {
               SizedBox(
                 width: double.infinity,
                 child: OutlinedButton.icon(
-                  onPressed: () => context.go('/profile/setup'),
+                  onPressed: () => context.push('/profile/setup'),
                   icon: const Icon(Icons.edit_outlined),
                   label: const Text('Cập nhật hồ sơ'),
                 ),
               ),
+              SizedBox(height: MediaQuery.of(context).viewPadding.bottom),
             ],
           ),
         );

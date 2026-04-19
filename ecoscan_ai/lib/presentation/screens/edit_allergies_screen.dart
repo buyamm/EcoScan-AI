@@ -72,7 +72,7 @@ class EditAllergiesScreen extends StatelessWidget {
                       activeColor: AppColors.danger,
                     ),
                     onTap: () =>
-                        context.go('/profile/allergies/detail', extra: allergen),
+                        context.push('/profile/allergies/detail', extra: allergen),
                   ),
                 );
               }),
@@ -85,7 +85,7 @@ class EditAllergiesScreen extends StatelessWidget {
                       style: TextStyle(
                           fontSize: 15, fontWeight: FontWeight.w700)),
                   TextButton.icon(
-                    onPressed: () => context.go('/profile/allergies/custom'),
+                    onPressed: () => context.push('/profile/allergies/custom'),
                     icon: const Icon(Icons.add, size: 16),
                     label: const Text('Thêm'),
                   ),
@@ -114,6 +114,7 @@ class EditAllergiesScreen extends StatelessWidget {
                         ),
                       ),
                     )),
+              SizedBox(height: MediaQuery.of(context).viewPadding.bottom),
             ],
           ),
         );

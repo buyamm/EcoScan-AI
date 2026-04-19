@@ -33,15 +33,15 @@ class _ManualInputScreenState extends State<ManualInputScreen> {
     return BlocListener<ScanBloc, ScanState>(
       listener: (context, state) {
         if (state is ScanLoading) {
-          context.go('/scan/loading', extra: state.barcode);
+          context.push('/scan/loading', extra: state.barcode);
         } else if (state is ScanSuccess) {
-          context.go('/product/found', extra: state.product);
+          context.push('/product/found', extra: state.product);
         } else if (state is ScanError &&
             state.type == ScanErrorType.productNotFound) {
-          context.go('/product/not-found', extra: state.barcode);
+          context.push('/product/not-found', extra: state.barcode);
         } else if (state is ScanError &&
             state.type == ScanErrorType.networkError) {
-          context.go('/error/network');
+          context.push('/error/network');
         }
       },
       child: Scaffold(
@@ -103,7 +103,7 @@ class _ManualInputScreenState extends State<ManualInputScreen> {
                 SizedBox(
                   width: double.infinity,
                   child: OutlinedButton.icon(
-                    onPressed: () => context.go('/scan/ocr'),
+                    onPressed: () => context.push('/scan/ocr'),
                     icon: const Icon(Icons.text_fields),
                     label: const Text('Quét nhãn OCR thay thế'),
                   ),

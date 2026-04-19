@@ -46,49 +46,56 @@ class ScanTipsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Mẹo quét sản phẩm')),
-      body: ListView.separated(
-        padding: const EdgeInsets.all(16),
-        itemCount: _tips.length,
-        separatorBuilder: (_, __) => const SizedBox(height: 8),
-        itemBuilder: (_, i) {
-          final tip = _tips[i];
-          return Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: AppColors.primary.withOpacity(0.05),
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(
-                  color: AppColors.primary.withOpacity(0.15)),
-            ),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Icon(tip.icon, color: AppColors.primary, size: 28),
-                const SizedBox(width: 14),
-                Expanded(
-                  child: Column(
+      body: Column(
+        children: [
+          Expanded(
+            child: ListView.separated(
+              padding: const EdgeInsets.all(16),
+              itemCount: _tips.length,
+              separatorBuilder: (_, __) => const SizedBox(height: 8),
+              itemBuilder: (_, i) {
+                final tip = _tips[i];
+                return Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: AppColors.primary.withOpacity(0.05),
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(
+                        color: AppColors.primary.withOpacity(0.15)),
+                  ),
+                  child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        tip.title,
-                        style: const TextStyle(
-                            fontWeight: FontWeight.w700, fontSize: 14),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        tip.desc,
-                        style: TextStyle(
-                            fontSize: 13,
-                            color: Colors.grey[600],
-                            height: 1.4),
+                      Icon(tip.icon, color: AppColors.primary, size: 28),
+                      const SizedBox(width: 14),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              tip.title,
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.w700, fontSize: 14),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              tip.desc,
+                              style: TextStyle(
+                                  fontSize: 13,
+                                  color: Colors.grey[600],
+                                  height: 1.4),
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   ),
-                ),
-              ],
+                );
+              },
             ),
-          );
-        },
+          ),
+          SizedBox(height: MediaQuery.of(context).viewPadding.bottom),
+        ],
       ),
     );
   }

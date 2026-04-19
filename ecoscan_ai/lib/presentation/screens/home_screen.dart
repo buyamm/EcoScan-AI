@@ -230,6 +230,7 @@ class DashboardScreen extends StatelessWidget {
                     onTap: () => context.push('/history/detail', extra: r),
                   )),
             ],
+            SizedBox(height: MediaQuery.of(context).viewPadding.bottom),
           ],
         ),
       ),

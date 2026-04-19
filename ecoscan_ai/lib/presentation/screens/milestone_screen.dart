@@ -42,6 +42,7 @@ class MilestoneScreen extends StatelessWidget {
                 icon: const Icon(Icons.emoji_events_outlined),
                 label: const Text('Xem tất cả thành tích'),
               ),
+              SizedBox(height: MediaQuery.of(context).viewPadding.bottom),
             ],
           ),
         );

@@ -60,15 +60,15 @@ class _ScanScreenState extends State<ScanScreen> with WidgetsBindingObserver {
     return BlocListener<ScanBloc, ScanState>(
       listener: (context, state) {
         if (state is ScanLoading) {
-          context.go('/scan/loading', extra: state.barcode);
+          context.push('/scan/loading', extra: state.barcode);
         } else if (state is ScanError &&
             state.type == ScanErrorType.productNotFound) {
-          context.go('/product/not-found', extra: state.barcode);
+          context.push('/product/not-found', extra: state.barcode);
         } else if (state is ScanError &&
             state.type == ScanErrorType.networkError) {
-          context.go('/error/network');
+          context.push('/error/network');
         } else if (state is ScanSuccess) {
-          context.go('/product/found', extra: state.product);
+          context.push('/product/found', extra: state.product);
         }
       },
       child: Scaffold(
@@ -121,17 +121,17 @@ class _ScanScreenState extends State<ScanScreen> with WidgetsBindingObserver {
                     _ActionButton(
                       icon: Icons.text_fields,
                       label: AppLocalizations.of(context).scanOCR,
-                      onTap: () => context.go('/scan/ocr'),
+                      onTap: () => context.push('/scan/ocr'),
                     ),
                     _ActionButton(
                       icon: Icons.keyboard,
                       label: AppLocalizations.of(context).manualInput,
-                      onTap: () => context.go('/scan/manual'),
+                      onTap: () => context.push('/scan/manual'),
                     ),
                     _ActionButton(
                       icon: Icons.help_outline,
                       label: AppLocalizations.of(context).scanTips,
-                      onTap: () => context.go('/scan/tips'),
+                      onTap: () => context.push('/scan/tips'),
                     ),
                   ],
                 ),
